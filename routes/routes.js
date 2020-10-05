@@ -1,6 +1,13 @@
-  import express from 'express';
+import express from 'express';
 const router = express.Router();
-import { registerUser, logInUser } from '../controllers/userController.js';
+import {
+  registerUser,
+  logInUser,
+  updateUser,
+  userById,
+  deleteUser,
+  displayAllUsers,
+} from '../controllers/userController.js';
 
 /**
  * Routes
@@ -17,7 +24,10 @@ router.get('/register', (req, res) => {
   res.status(200).send('register page');
 });
 
-router.post('/register', registerUser);
-router.post('/login', logInUser);
+router.route('/register').post(registerUser);
+router.route('/login').post(logInUser);
+
+router.route('/users/updateUser/:id').get(userById).put(updateUser).delete(deleteUser);
+router.route('/users').get(displayAllUsers);
 
 export default router;
