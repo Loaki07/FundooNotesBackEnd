@@ -3,13 +3,13 @@ import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
 const registerNewUser = (data, callback) => {
-  bcrypt.hash(data.password, saltRounds, function (err, hash) {
+  bcrypt.hash(data.password, saltRounds, function (err, hashedPassword) {
     // Store hash in your password DB.
     const newUser = new User({
-      firstName: data.firstName,
+      firstName: data.firstName,  
       lastName: data.lastName,
       email: data.email,
-      password: hash,
+      password: hashedPassword,
     });
 
     newUser.save((err, result) => {
