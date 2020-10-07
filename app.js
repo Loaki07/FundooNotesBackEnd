@@ -4,6 +4,7 @@ import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes/routes.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 connectDB();
@@ -15,6 +16,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use('/', routes);
 
 app.get('/', (req, res) => {

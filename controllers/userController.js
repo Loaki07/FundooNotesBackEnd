@@ -11,15 +11,14 @@ class UserController {
    * @param {response} res
    */
   registerUser = async (req, res) => {
-    const responseData = {};
     try {
+      const responseData = {};
       const result = await registerNewUser(req.body);
-
       responseData.success = true;
       responseData.message = 'Successfully Registered User!';
-      responseData.token = getSignedJwtToken(result._id);
-      res.status(200).send(responseData);
+      this.#sendTokenResponse(result, 200, res, responseData);
     } catch (error) {
+      const responseData = {};
       responseData.success = false;
       responseData.error = error;
       res.status(500).send(responseData);
@@ -33,15 +32,15 @@ class UserController {
    * @param {response} res
    */
   logInUser = async (req, res) => {
-    const responseData = {};
     try {
+      const responseData = {};
       this.#validateUserLogIn(req.body);
       const result = await logInByUserName(req.body);
       responseData.success = true;
       responseData.message = 'Successfully Logged In!';
-      responseData.token = getSignedJwtToken(result._id);
-      res.status(200).send(responseData);
+      this.#sendTokenResponse(result, 200, res, responseData);
     } catch (error) {
+      const responseData = {};
       responseData.success = false;
       responseData.error = error.message;
       res.status(500).send(responseData);
@@ -55,8 +54,8 @@ class UserController {
    * @param {response} res
    */
   displayAllUsers = async (req, res) => {
-    const responseData = {};
     try {
+      const responseData = {};
       const result = await findAllUsers();
       if (!result || result === null) {
         throw new Error('Database is Empty!');
@@ -65,6 +64,7 @@ class UserController {
       responseData.data = result;
       res.status(200).send(responseData);
     } catch (error) {
+      const responseData = {};
       responseData.success = false;
       responseData.error = error.message;
       res.status(500).send(responseData);
@@ -84,6 +84,18 @@ class UserController {
     } else if (!email) {
       throw new Error('Email cannot be empty!');
     }
+  };
+
+  #sendTokenResponse = (user, statusCode, res, responseObject) => {
+    const token = getSignedJwtToken(user._id);
+
+    const options = {
+      expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE),
+      httpOnly: true,
+      secure: true,
+    };
+    responseObject.token = token;
+    res.status(statusCode).cookie('token', token, options).send(responseObject);
   };
 }
 
