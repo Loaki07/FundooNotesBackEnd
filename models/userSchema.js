@@ -63,6 +63,23 @@ class UserModel {
   logIn = (data, callback) => {
     const { email, password } = data;
 
+    if (!email && !password) {
+      return callback({
+        success: false,
+        message: 'Please provide an email and password!',
+      });
+    } else if (!password) {
+      return callback({
+        success: false,
+        message: 'Please enter the password!',
+      });
+    } else if (!email) {
+      return callback({
+        success: false,
+        message: 'Please provide an email!',
+      });
+    }
+
     User.findOne({ email: email }, (err, foundUser) => {
       if (err) {
         callback(err);
