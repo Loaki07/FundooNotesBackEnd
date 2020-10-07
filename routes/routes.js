@@ -1,14 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import UserController from '../controllers/userController.js';
-const {
-  registerUser,
-  logInUser,
-  updateUser,
-  userById,
-  deleteUser,
-  displayAllUsers,
-} = new UserController();
+const { registerUser, logInUser, displayAllUsers } = new UserController();
 
 /**
  * Routes

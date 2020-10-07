@@ -1,16 +1,12 @@
 import UserService from '../services/userServices.js';
 import { getSignedJwtToken } from '../utility/utility.js';
 
-const {
-  registerNewUser,
-  logInByUserName,
-  updateUserDetails,
-  findUserByID,
-  deleteUserByID,
-  findAllUsers,
-} = new UserService();
+const { registerNewUser, logInByUserName, findAllUsers } = new UserService();
 
 class UserController {
+  // Response Array
+  #responseData = {};
+
   /**
    * Register User
    * @param {request} req
@@ -19,10 +15,13 @@ class UserController {
   registerUser = (req, res) => {
     registerNewUser(req.body, (err, resultData) => {
       if (err) {
-        res.status(500).send(err);
+        this.#responseData.success = false;
+        this.#responseData.error = err;
+        res.status(500).send(this.#responseData);
       } else {
-        const token = getSignedJwtToken(resultData._id);
-        res.status(200).send(token);
+        this.#responseData.success = true;
+        this.#responseData.message = 'Successfully Registered User!';
+        res.status(200).send(this.#responseData);
       }
     });
   };
@@ -35,11 +34,18 @@ class UserController {
   logInUser = (req, res) => {
     logInByUserName(req.body, (err, resultData) => {
       if (err) {
-        res.status(500).send(err);
+        this.#responseData.success = false;
+        this.#responseData.error = err;
+        res.status(500).send(this.#responseData);
       } else if (resultData === null || resultData === undefined) {
-        res.status(404).send(`User with email ${req.body.email} Not Found!`);
+        this.#responseData.success = false;
+        this.#responseData.message = `User with email ${req.body.email}, Not Found!`;
+        res.status(404).send(this.#responseData);
       } else {
-        res.status(200).send('Successfully Logged In!');
+        this.#responseData.success = true;
+        this.#responseData.message = 'Successfully Logged In!';
+        this.#responseData.token = getSignedJwtToken(resultData._id);
+        res.status(200).send(this.#responseData);
       }
     });
   };
@@ -47,11 +53,16 @@ class UserController {
   displayAllUsers = (req, res) => {
     findAllUsers((err, resultData) => {
       if (err) {
-        res.status(500).send(err);
+        this.#responseData.success = false;
+        this.#responseData.error = err;
+        res.status(500).send(this.#responseData);
       } else if (resultData === null || resultData === undefined) {
-        res.status(200).send('Database is Empty!');
+        this.#responseData.message = 'Database is Empty!';
+        res.status(200).send(this.#responseData);
       } else {
-        res.status(200).send(resultData);
+        this.#responseData.message = 'User Data From DataBase';
+        // this.#responseData.data = resultData;
+        res.status(200).send(this.#responseData);
       }
     });
   };

@@ -72,6 +72,8 @@ class UserModel {
           bcrypt.compare(password, foundUser.password, function (err, result) {
             if (result == true) {
               callback(null, result);
+            } else {
+              callback({ success: false, message: 'Incorrect Password' });
             }
           });
         } else {
@@ -88,8 +90,8 @@ class UserModel {
       } else {
         callback(null, result);
       }
-    })
-  }
+    });
+  };
 }
 
 export default UserModel;
