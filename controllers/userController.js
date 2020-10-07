@@ -32,6 +32,25 @@ class UserController {
    * @param {response} res
    */
   logInUser = (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email && !password) {
+      return res.status(400).send({
+        success: false,
+        message: 'Please provide an email and password!',
+      });
+    } else if (!password) {
+      return res.status(400).send({
+        success: false,
+        message: 'Password cannot be empty!',
+      });
+    } else if (!email) {
+      return res.status(400).send({
+        success: false,
+        message: 'Email cannot be empty!',
+      });
+    }
+
     logInByUserName(req.body, (err, resultData) => {
       if (err) {
         res.status(500).send(err);
