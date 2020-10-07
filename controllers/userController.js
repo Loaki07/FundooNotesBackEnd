@@ -5,7 +5,8 @@ const { registerNewUser, logInByUserName, findAllUsers } = new UserService();
 
 class UserController {
   /**
-   * Register User
+   * @description Register User
+   * @route POST /register
    * @param {request} req
    * @param {response} res
    */
@@ -26,7 +27,8 @@ class UserController {
   };
 
   /**
-   * LogIn User
+   * @description LogIn User
+   * @route POST /login
    * @param {request} req
    * @param {response} res
    */
@@ -46,18 +48,12 @@ class UserController {
     }
   };
 
-  #validateUserLogIn = (data) => {
-    const { email, password } = data;
-
-    if (!email && !password) {
-      throw new Error('Please provide an email and password!');
-    } else if (!password) {
-      throw new Error('Password cannot be empty!');
-    } else if (!email) {
-      throw new Error('Email cannot be empty!');
-    }
-  };
-
+  /**
+   * @description Display all the users from the dataBase
+   * @route GET /users
+   * @param {request} req
+   * @param {response} res
+   */
   displayAllUsers = async (req, res) => {
     const responseData = {};
     try {
@@ -72,6 +68,21 @@ class UserController {
       responseData.success = false;
       responseData.error = error.message;
       res.status(500).send(responseData);
+    }
+  };
+
+  /**
+   * @description Validating User Input for log In
+   * @param {request.body} data
+   */
+  #validateUserLogIn = (data) => {
+    const { email, password } = data;
+    if (!email && !password) {
+      throw new Error('Please provide an email and password!');
+    } else if (!password) {
+      throw new Error('Password cannot be empty!');
+    } else if (!email) {
+      throw new Error('Email cannot be empty!');
     }
   };
 }
