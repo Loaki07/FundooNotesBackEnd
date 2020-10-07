@@ -12,18 +12,19 @@ class UserController {
    * @param {request} req
    * @param {response} res
    */
-  registerUser = (req, res) => {
-    registerNewUser(req.body, (err, resultData) => {
-      if (err) {
-        this.#responseData.success = false;
-        this.#responseData.error = err;
-        res.status(500).send(this.#responseData);
-      } else {
-        this.#responseData.success = true;
-        this.#responseData.message = 'Successfully Registered User!';
-        res.status(200).send(this.#responseData);
-      }
-    });
+  registerUser = async (req, res) => {
+    try {
+      const result = await registerNewUser(req.body);
+
+      this.#responseData.success = true;
+      this.#responseData.message = 'Successfully Registered User!';
+      this.#responseData.token = getSignedJwtToken(result._id);
+      res.status(200).send(this.#responseData);
+    } catch (error) {
+      this.#responseData.success = false;
+      this.#responseData.error = error;
+      res.status(500).send(this.#responseData);
+    }
   };
 
   /**
@@ -67,6 +68,7 @@ class UserController {
     findAllUsers((err, resultData) => {
       if (err) {
         this.#responseData.success = false;
+        this.#responseData.message = 'Some Error';
         this.#responseData.error = err;
         res.status(500).send(this.#responseData);
       } else if (resultData === null || resultData === undefined) {
@@ -75,7 +77,7 @@ class UserController {
       } else {
         this.#responseData.message = 'User Data From DataBase';
         // this.#responseData.data = resultData;
-        res.status(200).send(this.#responseData);
+        res.status(200).send(resultData);
       }
     });
   };

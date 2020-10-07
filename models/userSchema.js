@@ -37,27 +37,26 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.pre('save', async function (next) {
+  const saltRounds = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, saltRounds);
+});
+
 const User = mongoose.model('User', userSchema);
 
 class UserModel {
-  register = (data, callback) => {
-    bcrypt.hash(data.password, saltRounds, function (err, hashedPassword) {
-      // Store hash in your password DB.
-      const newUser = new User({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        password: hashedPassword,
+  register = async (data) => {
+    try {
+      const { firstName, lastName, email, password } = data;
+      return User.create({
+        firstName,
+        lastName,
+        email,
+        password,
       });
-
-      newUser.save((err, result) => {
-        if (err) {
-          callback(err);
-        } else {
-          callback(null, result);
-        }
-      });
-    });
+    } catch (error) {
+      return error;
+    }
   };
 
   logIn = (data, callback) => {

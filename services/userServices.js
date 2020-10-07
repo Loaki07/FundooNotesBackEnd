@@ -3,14 +3,12 @@ import UserModel from '../models/userSchema.js';
 const { register, logIn, getAllUsers } = new UserModel();
 
 class UserService {
-  registerNewUser = (data, callback) => {
-    register(data, (err, resultData) => {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, resultData);
-      }
-    });
+  registerNewUser = async (data, callback) => {
+    try {
+      return await register(data);
+    } catch (error) {
+      return error
+    }
   };
 
   logInByUserName = (data, callback) => {
@@ -24,11 +22,11 @@ class UserService {
   };
 
   findAllUsers = (callback) => {
-    getAllUsers((err, result) => {
+    getAllUsers((err, resultData) => {
       if (err) {
         callback(err);
       } else {
-        callback(result);
+        callback(resultData);
       }
     });
   };
