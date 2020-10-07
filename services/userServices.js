@@ -1,5 +1,5 @@
 import { UserModel } from '../models/userSchema.js';
-const { register, logIn, getAllUsers } = new UserModel();
+const { register, logIn, getAllUsers, getProtectedUser } = new UserModel();
 
 class UserService {
   registerNewUser = async (data) => {
@@ -22,6 +22,10 @@ class UserService {
   findAllUsers = async () => {
     return await getAllUsers();
   };
+
+  findProtectedUser = async(id) => {
+    return await getProtectedUser(id);
+  }
 }
 
 export default UserService;

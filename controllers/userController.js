@@ -1,7 +1,12 @@
 import UserService from '../services/userServices.js';
 import { getSignedJwtToken } from '../utility/utility.js';
 
-const { registerNewUser, logInByUserName, findAllUsers } = new UserService();
+const {
+  registerNewUser,
+  logInByUserName,
+  findAllUsers,
+  findProtectedUser,
+} = new UserService();
 
 class UserController {
   /**
@@ -71,6 +76,15 @@ class UserController {
     }
   };
 
+  getCurrentUserProfile = async (req, res, next) => {
+    const responseData = {};
+    const user = await findProtectedUser(req.user._id);
+    responseData.success = true;
+    responseData.message = 'Displaying details for the Current User';
+    responseData.data = user;
+    res.status(200).send(responseData);
+  };
+
   /**
    * @description Validating User Input for log In
    * @param {request.body} data
@@ -88,10 +102,10 @@ class UserController {
 
   /**
    * @description Store the JWT Token in a cookie and send as response
-   * @param {User} user 
-   * @param {statusCode} statusCode 
-   * @param {response} res 
-   * @param {responseObject} responseObject 
+   * @param {User} user
+   * @param {statusCode} statusCode
+   * @param {response} res
+   * @param {responseObject} responseObject
    */
   #sendTokenResponse = (user, statusCode, res, responseObject) => {
     const token = getSignedJwtToken(user._id);

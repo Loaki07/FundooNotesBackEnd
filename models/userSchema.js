@@ -88,6 +88,10 @@ class UserModel {
   getAllUsers = async () => {
     return await User.find();
   };
+
+  getProtectedUser = async (id) => {
+    return await User.findById(id);
+  };
 }
 
 export { UserModel, User };
