@@ -58,23 +58,21 @@ class UserController {
     }
   };
 
-  displayAllUsers = (req, res) => {
+  displayAllUsers = async (req, res) => {
     const responseData = {};
-    findAllUsers((err, resultData) => {
-      if (err) {
-        responseData.success = false;
-        responseData.message = 'Some Error';
-        responseData.error = err;
-        res.status(500).send(responseData);
-      } else if (resultData === null || resultData === undefined) {
-        responseData.message = 'Database is Empty!';
-        res.status(200).send(responseData);
-      } else {
-        responseData.message = 'User Data From DataBase';
-        // responseData.data = resultData;
-        res.status(200).send(resultData);
+    try {
+      const result = await findAllUsers();
+      if (!result || result === null) {
+        throw new Error('Database is Empty!');
       }
-    });
+      responseData.message = 'Retreived Users From DataBase';
+      responseData.data = result;
+      res.status(200).send(responseData);
+    } catch (error) {
+      responseData.success = false;
+      responseData.error = error.message;
+      res.status(500).send(responseData);
+    }
   };
 }
 

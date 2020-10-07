@@ -20,14 +20,8 @@ class UserService {
     }
   };
 
-  findAllUsers = (callback) => {
-    getAllUsers((err, resultData) => {
-      if (err) {
-        callback(err);
-      } else {
-        callback(resultData);
-      }
-    });
+  findAllUsers = async () => {
+    return await getAllUsers();
   };
 }
 

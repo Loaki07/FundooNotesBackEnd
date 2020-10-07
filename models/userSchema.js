@@ -66,9 +66,7 @@ class UserModel {
   };
 
   logIn = async (data) => {
-
     const { email, password } = data;
-
     try {
       const foundUser = await User.findOne({ email: email });
 
@@ -88,14 +86,8 @@ class UserModel {
     }
   };
 
-  getAllUsers = (callback) => {
-    User.find((err, result) => {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, result);
-      }
-    });
+  getAllUsers = async () => {
+    return await User.find();
   };
 }
 
