@@ -86,6 +86,13 @@ class UserController {
     }
   };
 
+  /**
+   * @description Store the JWT Token in a cookie and send as response
+   * @param {User} user 
+   * @param {statusCode} statusCode 
+   * @param {response} res 
+   * @param {responseObject} responseObject 
+   */
   #sendTokenResponse = (user, statusCode, res, responseObject) => {
     const token = getSignedJwtToken(user._id);
 
