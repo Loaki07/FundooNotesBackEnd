@@ -77,7 +77,7 @@ class UserModel {
             }
           });
         } else {
-          callback();
+          callback({ success: false, message: `User with email ${email}, Not Found!` });
         }
       }
     });

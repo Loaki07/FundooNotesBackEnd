@@ -34,13 +34,7 @@ class UserController {
   logInUser = (req, res) => {
     logInByUserName(req.body, (err, resultData) => {
       if (err) {
-        this.#responseData.success = false;
-        this.#responseData.error = err;
-        res.status(500).send(this.#responseData);
-      } else if (resultData === null || resultData === undefined) {
-        this.#responseData.success = false;
-        this.#responseData.message = `User with email ${req.body.email}, Not Found!`;
-        res.status(404).send(this.#responseData);
+        res.status(500).send(err);
       } else {
         this.#responseData.success = true;
         this.#responseData.message = 'Successfully Logged In!';
