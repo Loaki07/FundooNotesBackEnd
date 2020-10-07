@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import UserController from '../controllers/userController.js';
+import { protect } from '../middleware/authorization.js';
 const { registerUser, logInUser, displayAllUsers } = new UserController();
 
 /**
@@ -8,6 +9,7 @@ const { registerUser, logInUser, displayAllUsers } = new UserController();
  */
 router.route('/register').post(registerUser);
 router.route('/login').post(logInUser);
-router.route('/users').get(displayAllUsers);
+router.route('/users').get(protect, displayAllUsers);
 
 export default router;
+ 

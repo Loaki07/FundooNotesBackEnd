@@ -1,5 +1,4 @@
-import User from '../models/userSchema.js';
-import UserModel from '../models/userSchema.js';
+import { UserModel } from '../models/userSchema.js';
 const { register, logIn, getAllUsers } = new UserModel();
 
 class UserService {

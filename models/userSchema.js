@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-const saltRounds = 10;
 
 /**
  * Schema
@@ -91,4 +90,4 @@ class UserModel {
   };
 }
 
-export default UserModel;
+export { UserModel, User };
