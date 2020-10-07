@@ -37,10 +37,16 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Encrypt password using bcrypt
 userSchema.pre('save', async function (next) {
   const saltRounds = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, saltRounds);
 });
+
+// Match user entered password to hashed password in database
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 const User = mongoose.model('User', userSchema);
 
@@ -55,31 +61,31 @@ class UserModel {
         password,
       });
     } catch (error) {
-      return error;
+      throw new Error(error.message);
     }
   };
 
-  logIn = (data, callback) => {
+  logIn = async (data) => {
+
     const { email, password } = data;
 
-    User.findOne({ email: email }, (err, foundUser) => {
-      if (err) {
-        callback(err);
-      } else {
-        if (foundUser) {
-          // Load hash from your password DB.
-          bcrypt.compare(password, foundUser.password, function (err, result) {
-            if (result == true) {
-              callback(null, result);
-            } else {
-              callback({ success: false, message: 'Incorrect Password' });
-            }
-          });
-        } else {
-          callback({ success: false, message: `User with email ${email}, Not Found!` });
-        }
+    try {
+      const foundUser = await User.findOne({ email: email });
+
+      if (foundUser === null || !foundUser) {
+        throw new Error(`User with email ${email}, Not Found!`);
       }
-    });
+
+      // Check if password matches
+      const isMatch = await foundUser.matchPassword(password);
+      if (isMatch) {
+        return foundUser;
+      } else {
+        throw new Error(`Incorrect Password`);
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 
   getAllUsers = (callback) => {

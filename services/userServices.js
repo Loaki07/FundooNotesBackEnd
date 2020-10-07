@@ -3,22 +3,21 @@ import UserModel from '../models/userSchema.js';
 const { register, logIn, getAllUsers } = new UserModel();
 
 class UserService {
-  registerNewUser = async (data, callback) => {
+  registerNewUser = async (data) => {
     try {
       return await register(data);
     } catch (error) {
-      return error
+      throw new Error(error.message);
     }
   };
 
-  logInByUserName = (data, callback) => {
-    logIn(data, (err, resultData) => {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, resultData);
-      }
-    });
+  logInByUserName = async (data) => {
+    try {
+      const foundUser = await logIn(data);
+      return foundUser;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 
   findAllUsers = (callback) => {

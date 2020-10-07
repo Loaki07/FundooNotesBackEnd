@@ -4,26 +4,24 @@ import { getSignedJwtToken } from '../utility/utility.js';
 const { registerNewUser, logInByUserName, findAllUsers } = new UserService();
 
 class UserController {
-  // Response Array
-  #responseData = {};
-
   /**
    * Register User
    * @param {request} req
    * @param {response} res
    */
   registerUser = async (req, res) => {
+    const responseData = {};
     try {
       const result = await registerNewUser(req.body);
 
-      this.#responseData.success = true;
-      this.#responseData.message = 'Successfully Registered User!';
-      this.#responseData.token = getSignedJwtToken(result._id);
-      res.status(200).send(this.#responseData);
+      responseData.success = true;
+      responseData.message = 'Successfully Registered User!';
+      responseData.token = getSignedJwtToken(result._id);
+      res.status(200).send(responseData);
     } catch (error) {
-      this.#responseData.success = false;
-      this.#responseData.error = error;
-      res.status(500).send(this.#responseData);
+      responseData.success = false;
+      responseData.error = error;
+      res.status(500).send(responseData);
     }
   };
 
@@ -32,51 +30,48 @@ class UserController {
    * @param {request} req
    * @param {response} res
    */
-  logInUser = (req, res) => {
-    const { email, password } = req.body;
+  logInUser = async (req, res) => {
+    const responseData = {};
+    try {
+      this.#validateUserLogIn(req.body);
+      const result = await logInByUserName(req.body);
+      responseData.success = true;
+      responseData.message = 'Successfully Logged In!';
+      responseData.token = getSignedJwtToken(result._id);
+      res.status(200).send(responseData);
+    } catch (error) {
+      responseData.success = false;
+      responseData.error = error.message;
+      res.status(500).send(responseData);
+    }
+  };
+
+  #validateUserLogIn = (data) => {
+    const { email, password } = data;
 
     if (!email && !password) {
-      return res.status(400).send({
-        success: false,
-        message: 'Please provide an email and password!',
-      });
+      throw new Error('Please provide an email and password!');
     } else if (!password) {
-      return res.status(400).send({
-        success: false,
-        message: 'Password cannot be empty!',
-      });
+      throw new Error('Password cannot be empty!');
     } else if (!email) {
-      return res.status(400).send({
-        success: false,
-        message: 'Email cannot be empty!',
-      });
+      throw new Error('Email cannot be empty!');
     }
-
-    logInByUserName(req.body, (err, resultData) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        this.#responseData.success = true;
-        this.#responseData.message = 'Successfully Logged In!';
-        this.#responseData.token = getSignedJwtToken(resultData._id);
-        res.status(200).send(this.#responseData);
-      }
-    });
   };
 
   displayAllUsers = (req, res) => {
+    const responseData = {};
     findAllUsers((err, resultData) => {
       if (err) {
-        this.#responseData.success = false;
-        this.#responseData.message = 'Some Error';
-        this.#responseData.error = err;
-        res.status(500).send(this.#responseData);
+        responseData.success = false;
+        responseData.message = 'Some Error';
+        responseData.error = err;
+        res.status(500).send(responseData);
       } else if (resultData === null || resultData === undefined) {
-        this.#responseData.message = 'Database is Empty!';
-        res.status(200).send(this.#responseData);
+        responseData.message = 'Database is Empty!';
+        res.status(200).send(responseData);
       } else {
-        this.#responseData.message = 'User Data From DataBase';
-        // this.#responseData.data = resultData;
+        responseData.message = 'User Data From DataBase';
+        // responseData.data = resultData;
         res.status(200).send(resultData);
       }
     });
