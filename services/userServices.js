@@ -1,109 +1,37 @@
 import User from '../models/userSchema.js';
-import bcrypt from 'bcrypt';
-const saltRounds = 10;
+import UserModel from '../models/userSchema.js';
+const { register, logIn, getAllUsers } = new UserModel();
 
-const registerNewUser = (data, callback) => {
-  bcrypt.hash(data.password, saltRounds, function (err, hashedPassword) {
-    // Store hash in your password DB.
-    const newUser = new User({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      password: hashedPassword,
-    });
-
-    newUser.save((err, result) => {
+class UserService {
+  registerNewUser = (data, callback) => {
+    register(data, (err, resultData) => {
       if (err) {
         callback(err);
       } else {
-        callback(null, result);
+        callback(null, resultData);
       }
     });
-  });
-};
-
-const logIn = (data, callback) => {
-  const { firstName, lastName, email, password } = data;
-
-  User.findOne({ email: email }, (err, foundUser) => {
-    if (err) {
-      callback(err);
-    } else {
-      if (foundUser) {
-        console.log('FoundUser', foundUser);
-        // Load hash from your password DB.
-        bcrypt.compare(password, foundUser.password, function (err, result) {
-          if (result == true) {
-            callback(null, result);
-          }
-        });
-      } else {
-        callback();
-      }
-    }
-  });
-};
-
-const findUserByID = (data, callback) => {
-  User.findById(data.params.id, (err, result) => {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
-};
-
-const updateUserDetails = (data, callback) => {
-  const fieldsToUpdate = {
-    firstName: data.body.firstName,
-    lastName: data.body.lastName,
-    email: data.body.email,
   };
 
-  User.findByIdAndUpdate(
-    data.params.id,
-    fieldsToUpdate,
-    {
-      new: true,
-      useFindAndModify: false,
-      runValidators: true,
-    },
-    (err, result) => {
+  logInByUserName = (data, callback) => {
+    logIn(data, (err, resultData) => {
       if (err) {
         callback(err);
       } else {
-        callback(null, result);
+        callback(null, resultData);
       }
-    }
-  );
-};
+    });
+  };
 
-const deleteUserByID = (data, callback) => {
-  User.deleteOne({ _id: data.params.id }, (err) => {
-    if (err) {
-      callback(err);
-    } else {
-      callback();
-    }
-  });
-};
+  findAllUsers = (callback) => {
+    getAllUsers((err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(result);
+      }
+    });
+  };
+}
 
-const findAllUsers = (callback) => {
-  User.find((err, result) => {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
-};
-
-export {
-  registerNewUser,
-  logIn,
-  updateUserDetails,
-  findUserByID,
-  deleteUserByID,
-  findAllUsers,
-};
+export default UserService;

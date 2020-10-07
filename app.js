@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import connectDB from './config/dbConnection.js';
+import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes/routes.js';
@@ -11,15 +12,14 @@ const app = express();
 /**
  * Middlewares
  */
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Methods', '*');
-  next();
-});
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', routes);
+
+app.get('/', (req, res) => {
+  res.status(200).send('Welcome to the Fundoo Notes Application');
+});
 
 /**
  * Server

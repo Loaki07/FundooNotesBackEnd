@@ -1,2 +1,4 @@
-MONGODB_URL=mongodb://localhost:27017/fundooApp
-PORT=3000
+MONGODB_URL=
+PORT=
+JWT_SECRET=
+JWT_EXPIRE=
