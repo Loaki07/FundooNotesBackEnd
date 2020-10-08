@@ -1,7 +1,5 @@
 import UserService from '../services/userServices.js';
 import { getSignedJwtToken, getResetPasswordToken } from '../utility/utility.js';
-import { User, UserModel } from '../models/userSchema.js';
-const { forgotPassword } = new UserModel();
 const {
   registerNewUser,
   logInByUserName,

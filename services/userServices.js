@@ -15,7 +15,7 @@ class UserService {
     try {
       const isUserPresent = await findUserByEmail(data.email);
       if (isUserPresent) {
-        throw new Error(`User with ${data.email} already exists!`);
+        throw new Error(`User with email '${data.email}' already exists!`);
       }
       return await createUser(data);
     } catch (error) {
@@ -35,6 +35,10 @@ class UserService {
   forgotPasswordService = async (email) => {
     try {
       const foundUser = await findUserByEmail(email);
+      if (!foundUser) {
+        throw new Error(`User with email '${email}' does not exist`);
+      }
+
       const resetToken = getResetPasswordToken();
 
       // Hash token and set to resetPasswordToken field
