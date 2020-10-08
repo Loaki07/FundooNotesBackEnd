@@ -3,9 +3,7 @@ import { getResetPasswordToken } from '../utility/utility.js';
 import crypto from 'crypto';
 const {
   createUser,
-  register,
   findUserAndVerify,
-  logIn,
   getAllUsers,
   getProtectedUser,
   findUserByEmail,
@@ -19,7 +17,6 @@ class UserService {
       if (isUserPresent) {
         throw new Error(`User with ${data.email} already exists!`);
       }
-      console.log(await createUser(data));
       return await createUser(data);
     } catch (error) {
       throw new Error(error.message);

@@ -20,7 +20,6 @@ class UserController {
   registerUser = async (req, res) => {
     try {
       const responseData = {};
-      
       const result = await registerNewUser(req.body);
       console.log('registerUserResult', result);
       responseData.success = true;
@@ -105,12 +104,19 @@ class UserController {
   };
 
   getCurrentUserProfile = async (req, res, next) => {
-    const responseData = {};
-    const user = await findProtectedUser(req.user._id);
-    responseData.success = true;
-    responseData.message = 'Displaying details for the Current User';
-    responseData.data = user;
-    res.status(200).send(responseData);
+    try {
+      const responseData = {};
+      const user = await findProtectedUser(req.user._id);
+      responseData.success = true;
+      responseData.message = 'Displaying details for the Current User';
+      responseData.data = user;
+      res.status(200).send(responseData);
+    } catch (error) {
+      const responseData = {};
+      responseData.success = false;
+      responseData.error = error.message;
+      res.status(500).send(responseData);
+    }
   };
 
   /**
