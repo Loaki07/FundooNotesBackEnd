@@ -20,14 +20,16 @@ class UserController {
   registerUser = async (req, res) => {
     try {
       const responseData = {};
+      
       const result = await registerNewUser(req.body);
+      console.log('registerUserResult', result);
       responseData.success = true;
       responseData.message = 'Successfully Registered User!';
       this.#sendTokenResponse(result, 200, res, responseData);
     } catch (error) {
       const responseData = {};
       responseData.success = false;
-      responseData.error = error;
+      responseData.error = error.message;
       res.status(500).send(responseData);
     }
   };
@@ -54,31 +56,28 @@ class UserController {
     }
   };
 
+  /**
+   * @description Forgot Password
+   * @route POST /forgotPassword
+   * @param {request} req
+   * @param {response} res
+   * @param {next operation} next
+   */
   forgotPassword = async (req, res, next) => {
     try {
-      forgotPassword(req, res);
+      const responseData = {};
+      const user = await forgotPasswordService(req.body.email);
+      responseData.success = true;
+      responseData.message = 'forgotPassword';
+      responseData.data = user;
+      res.status(200).send(responseData);
     } catch (error) {
-      console.log(error.message);
+      const responseData = {};
+      responseData.success = false;
+      responseData.error = error.message;
+      res.status(500).send(responseData);
     }
   };
-
-  // forgotPassword = async (req, res, next) => {
-  //   try {
-  //     const user = User.findOne({ email: req.body.email });
-
-  //     if (!user) {
-  //       throw new Error('There is no user with that email');
-  //     }
-
-  //     // Get reset token
-  //     const resetToken = getResetPasswordToken();
-  //   } catch (error) {
-  //     res.status(404).send({
-  //       success: false,
-  //       error: error.message,
-  //     });
-  //   }
-  // };
 
   /**
    * @description Display all the users from the dataBase

@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { getSignedJwtToken, getResetPasswordToken } from '../utility/utility.js';
-import crypto from 'crypto';
 
 /**
  * Schema
@@ -55,21 +53,17 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 const User = mongoose.model('User', userSchema);
 
 class UserModel {
-  register = async (data) => {
-    try {
-      const { firstName, lastName, email, password } = data;
-      return User.create({
-        firstName,
-        lastName,
-        email,
-        password,
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
+  createUser = async (data) => {
+    const { firstName, lastName, email, password } = data;
+    return User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
   };
 
-  logIn = async (data) => {
+  findUserAndVerify = async (data) => {
     const { email, password } = data;
     try {
       const foundUser = await User.findOne({ email: email });
@@ -98,37 +92,12 @@ class UserModel {
     return await User.findById(id);
   };
 
-  forgotPassword = async (req, res) => {
-    try {
-      const foundUser = await User.findOne({ email: req.body.email });
-      if (!foundUser || foundUser === null) {
-        throw new Error(`User with email ${req.body.email}, Not Found!`);
-      }
-      const resetToken = getResetPasswordToken();
+  findUserByEmail = async (email) => {
+    return await User.findOne({ email });
+  };
 
-      // Hash token and set to resetPasswordToken field
-      foundUser.resetPasswordToken = crypto
-        .createHash('sha256')
-        .update(resetToken)
-        .digest('hex');
-
-      // Set Expire
-      foundUser.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
-      await foundUser.save({ validateBeforeSave: false });
-
-      console.log(resetToken);
-      res.status(200).send({
-        success: true,
-        message: 'forgotPassword',
-        data: foundUser,
-      });
-    } catch (error) {
-      console.log(error.message);
-      const responseData = {};
-      responseData.success = false;
-      responseData.error = error.message;
-      res.status(500).send(responseData);
-    }
+  SaveUser = async (user) => {
+    return user.save();
   };
 }
 

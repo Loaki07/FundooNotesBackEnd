@@ -1,5 +1,6 @@
 import { UserModel } from '../models/userSchema.js';
-import { getSignedJwtToken, getResetPasswordToken } from '../utility/utility.js';
+import { getResetPasswordToken } from '../utility/utility.js';
+import crypto from 'crypto';
 const {
   createUser,
   register,
@@ -7,13 +8,19 @@ const {
   logIn,
   getAllUsers,
   getProtectedUser,
-  forgotPassword,
+  findUserByEmail,
+  SaveUser,
 } = new UserModel();
 
 class UserService {
   registerNewUser = async (data) => {
     try {
-      return await register(data);
+      const isUserPresent = await findUserByEmail(data.email);
+      if (isUserPresent) {
+        throw new Error(`User with ${data.email} already exists!`);
+      }
+      console.log(await createUser(data));
+      return await createUser(data);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -21,7 +28,27 @@ class UserService {
 
   logInByUserName = async (data) => {
     try {
-      const foundUser = await logIn(data);
+      const foundUser = await findUserAndVerify(data);
+      return foundUser;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  forgotPasswordService = async (email) => {
+    try {
+      const foundUser = await findUserByEmail(email);
+      const resetToken = getResetPasswordToken();
+
+      // Hash token and set to resetPasswordToken field
+      foundUser.resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+      // Set Expire
+      foundUser.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+      await SaveUser(foundUser);
       return foundUser;
     } catch (error) {
       throw new Error(error.message);
