@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import { getSignedJwtToken, getResetPasswordToken } from '../utility/utility.js';
+import crypto from 'crypto';
 
 /**
  * Schema
@@ -29,7 +31,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       minlength: [3, 'A Minimum of 3 characters is required'],
       required: true,
+      select: true,
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
   {
     timestamps: true,
@@ -91,6 +96,39 @@ class UserModel {
 
   getProtectedUser = async (id) => {
     return await User.findById(id);
+  };
+
+  forgotPassword = async (req, res) => {
+    try {
+      const foundUser = await User.findOne({ email: req.body.email });
+      if (!foundUser || foundUser === null) {
+        throw new Error(`User with email ${req.body.email}, Not Found!`);
+      }
+      const resetToken = getResetPasswordToken();
+
+      // Hash token and set to resetPasswordToken field
+      foundUser.resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+      // Set Expire
+      foundUser.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+      await foundUser.save({ validateBeforeSave: false });
+
+      console.log(resetToken);
+      res.status(200).send({
+        success: true,
+        message: 'forgotPassword',
+        data: foundUser,
+      });
+    } catch (error) {
+      console.log(error.message);
+      const responseData = {};
+      responseData.success = false;
+      responseData.error = error.message;
+      res.status(500).send(responseData);
+    }
   };
 }
 

@@ -26,6 +26,9 @@ app.get('/', (req, res) => {
 /**
  * Server
  */
+
+// app.use('/*', 'Page Does not exist!');
+
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}...`);
 });

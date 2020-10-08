@@ -1,5 +1,14 @@
 import { UserModel } from '../models/userSchema.js';
-const { register, logIn, getAllUsers, getProtectedUser } = new UserModel();
+import { getSignedJwtToken, getResetPasswordToken } from '../utility/utility.js';
+const {
+  createUser,
+  register,
+  findUserAndVerify,
+  logIn,
+  getAllUsers,
+  getProtectedUser,
+  forgotPassword,
+} = new UserModel();
 
 class UserService {
   registerNewUser = async (data) => {
@@ -23,9 +32,9 @@ class UserService {
     return await getAllUsers();
   };
 
-  findProtectedUser = async(id) => {
+  findProtectedUser = async (id) => {
     return await getProtectedUser(id);
-  }
+  };
 }
 
 export default UserService;

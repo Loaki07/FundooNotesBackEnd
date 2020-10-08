@@ -1,11 +1,13 @@
 import UserService from '../services/userServices.js';
-import { getSignedJwtToken } from '../utility/utility.js';
-
+import { getSignedJwtToken, getResetPasswordToken } from '../utility/utility.js';
+import { User, UserModel } from '../models/userSchema.js';
+const { forgotPassword } = new UserModel();
 const {
   registerNewUser,
   logInByUserName,
   findAllUsers,
   findProtectedUser,
+  forgotPasswordService,
 } = new UserService();
 
 class UserController {
@@ -52,6 +54,32 @@ class UserController {
     }
   };
 
+  forgotPassword = async (req, res, next) => {
+    try {
+      forgotPassword(req, res);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  // forgotPassword = async (req, res, next) => {
+  //   try {
+  //     const user = User.findOne({ email: req.body.email });
+
+  //     if (!user) {
+  //       throw new Error('There is no user with that email');
+  //     }
+
+  //     // Get reset token
+  //     const resetToken = getResetPasswordToken();
+  //   } catch (error) {
+  //     res.status(404).send({
+  //       success: false,
+  //       error: error.message,
+  //     });
+  //   }
+  // };
+
   /**
    * @description Display all the users from the dataBase
    * @route GET /users
@@ -65,6 +93,7 @@ class UserController {
       if (!result || result === null) {
         throw new Error('Database is Empty!');
       }
+      responseData.success = true;
       responseData.message = 'Retreived Users From DataBase';
       responseData.data = result;
       res.status(200).send(responseData);

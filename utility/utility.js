@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 /**
  * @description Sign JWT
@@ -11,4 +12,10 @@ const getSignedJwtToken = (id) => {
   });
 };
 
-export { getSignedJwtToken };
+// Generate and hash password token
+const getResetPasswordToken = () => {
+  const resetToken = crypto.randomBytes(20).toString('hex');
+  return resetToken;
+};
+
+export { getSignedJwtToken, getResetPasswordToken };
