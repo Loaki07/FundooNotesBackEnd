@@ -49,7 +49,7 @@ class UserService {
         .update(resetToken)
         .digest('hex');
 
-      // Set Expire
+      // Set Expire Time
       foundUser.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
       await SaveUser(foundUser);
 
@@ -57,9 +57,9 @@ class UserService {
       const resetUrl = `${requestData.protocol}://${requestData.get(
         'host'
       )}/fundooapp/resetpassword/${resetToken}`;
-
       const message = `Please click on the reset link provided below to reset the password \n\nLink expires in 10 minutes \n\nReset Link: ${resetUrl}`;
 
+      // Send the reset link to the user
       await sendEmail({
         email: requestData.body.email,
         subject: 'FundooApp Password Reset Link',
@@ -68,8 +68,8 @@ class UserService {
 
       return foundUser;
     } catch (error) {
-      clearResetFields(requestData);
-      await SaveUser(requestData);
+      clearResetFields(requestData.body);
+      await SaveUser(requestData.body);
       throw new Error(error.message);
     }
   };
