@@ -34,6 +34,11 @@ class UserService {
     }
   };
 
+  /**
+   * @description When Forgotten Password sends Email to Reset Password with the reset token
+   * @param {requestData} requestData 
+   * @returns User with resetToken with expire time
+   */
   forgotPasswordService = async (requestData) => {
     try {
       const foundUser = await findUserByEmail(requestData.body.email);

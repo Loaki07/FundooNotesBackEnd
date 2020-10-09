@@ -100,7 +100,7 @@ class UserModel {
     return await user.save;
   };
 
-  clearResetFields = async (user) => {
+  clearResetFields = (user) => {
     (user.resetPasswordToken = undefined), (user.resetPasswordExpire = undefined);
   };
 }
