@@ -1,5 +1,6 @@
 import UserService from '../services/userServices.js';
-import { getSignedJwtToken, getResetPasswordToken } from '../utility/utility.js';
+import { getSignedJwtToken, getResetPasswordToken } from '../utility/tokens.js';
+
 const {
   registerNewUser,
   logInByUserName,
@@ -63,15 +64,16 @@ class UserController {
   forgotPassword = async (req, res, next) => {
     try {
       const responseData = {};
-      const user = await forgotPasswordService(req.body.email);
+      const user = await forgotPasswordService(req);
       responseData.success = true;
-      responseData.message = 'forgotPassword';
+      responseData.message = `Forgot Password\n\nEmail Sent to reset the Password`;
       responseData.data = user;
       res.status(200).send(responseData);
     } catch (error) {
       const responseData = {};
       responseData.success = false;
       responseData.error = error.message;
+      console.log(error);
       res.status(500).send(responseData);
     }
   };

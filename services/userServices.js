@@ -1,6 +1,7 @@
 import { UserModel } from '../models/userSchema.js';
-import { getResetPasswordToken } from '../utility/utility.js';
+import { getResetPasswordToken } from '../utility/tokens.js';
 import crypto from 'crypto';
+import sendEmail from '../utility/sendEmail.js';
 const {
   createUser,
   findUserAndVerify,
@@ -8,6 +9,7 @@ const {
   getProtectedUser,
   findUserByEmail,
   SaveUser,
+  clearResetFields,
 } = new UserModel();
 
 class UserService {
@@ -32,11 +34,11 @@ class UserService {
     }
   };
 
-  forgotPasswordService = async (email) => {
+  forgotPasswordService = async (requestData) => {
     try {
-      const foundUser = await findUserByEmail(email);
+      const foundUser = await findUserByEmail(requestData.body.email);
       if (!foundUser) {
-        throw new Error(`User with email '${email}' does not exist`);
+        throw new Error(`User with email '${requestData.body.email}' does not exist`);
       }
 
       const resetToken = getResetPasswordToken();
@@ -50,8 +52,24 @@ class UserService {
       // Set Expire
       foundUser.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
       await SaveUser(foundUser);
+
+      // Create reset url
+      const resetUrl = `${requestData.protocol}://${requestData.get(
+        'host'
+      )}/fundooapp/resetpassword/${resetToken}`;
+
+      const message = `Please click on the reset link provided below to reset the password \n\nLink expires in 10 minutes \n\nReset Link: ${resetUrl}`;
+
+      await sendEmail({
+        email: requestData.body.email,
+        subject: 'FundooApp Password Reset Link',
+        message,
+      });
+
       return foundUser;
     } catch (error) {
+      clearResetFields(requestData);
+      await SaveUser(requestData);
       throw new Error(error.message);
     }
   };
