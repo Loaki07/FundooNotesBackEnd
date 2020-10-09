@@ -43,7 +43,6 @@ const userSchema = new mongoose.Schema(
 userSchema.pre('save', async function () {
   const saltRounds = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, saltRounds);
-  console.log(this.password);
 });
 
 // Match user entered password to hashed password in database
@@ -62,27 +61,6 @@ class UserModel {
       email,
       password,
     });
-  };
-
-  findUserAndVerify = async (data) => {
-    const { email, password } = data;
-    try {
-      const foundUser = await User.findOne({ email: email });
-
-      if (foundUser === null || !foundUser) {
-        throw new Error(`User with email ${email}, Not Found!`);
-      }
-
-      // Check if password matches
-      const isMatch = await foundUser.matchPassword(password);
-      if (isMatch) {
-        return foundUser;
-      } else {
-        throw new Error(`Incorrect Password`);
-      }
-    } catch (error) {
-      throw new Error(error.message);
-    }
   };
 
   getAllUsers = async () => {

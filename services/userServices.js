@@ -4,7 +4,6 @@ import crypto from 'crypto';
 import sendEmail from '../utility/sendEmail.js';
 const {
   createUser,
-  findUserAndVerify,
   getAllUsers,
   getProtectedUser,
   findOne,
@@ -30,7 +29,17 @@ class UserService {
 
   logInByUserName = async (data) => {
     try {
-      const foundUser = await findUserAndVerify(data);
+      const { email, password } = data;
+
+      const foundUser = await findOne({ email });
+      if (foundUser === null || !foundUser) {
+        throw new Error(`User with email ${email}, Not Found!`);
+      }
+      // Check if password matches
+      const isMatch = await foundUser.matchPassword(password);
+      if (!isMatch) {
+        throw new Error(`Incorrect Password`);
+      }
       return foundUser;
     } catch (error) {
       throw new Error(error.message);
