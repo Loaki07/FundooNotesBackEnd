@@ -7,15 +7,18 @@ const {
   findUserAndVerify,
   getAllUsers,
   getProtectedUser,
-  findUserByEmail,
+  findOne,
   SaveUser,
   clearResetFields,
+  saveUserWithoutValidation,
 } = new UserModel();
 
 class UserService {
   registerNewUser = async (data) => {
     try {
-      const isUserPresent = await findUserByEmail(data.email);
+      const isUserPresent = await findOne({
+        email: data.email,
+      });
       if (isUserPresent) {
         throw new Error(`User with email '${data.email}' already exists!`);
       }
@@ -36,12 +39,14 @@ class UserService {
 
   /**
    * @description When Forgotten Password sends Email to Reset Password with the reset token
-   * @param {requestData} requestData 
+   * @param {requestData} requestData
    * @returns User with resetToken with expire time
    */
   forgotPasswordService = async (requestData) => {
     try {
-      const foundUser = await findUserByEmail(requestData.body.email);
+      const foundUser = await findOne({
+        email: requestData.body.email,
+      });
       if (!foundUser) {
         throw new Error(`User with email '${requestData.body.email}' does not exist`);
       }
@@ -56,7 +61,7 @@ class UserService {
 
       // Set Expire Time
       foundUser.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
-      await SaveUser(foundUser);
+      await saveUserWithoutValidation(foundUser);
 
       // Create reset url
       const resetUrl = `${requestData.protocol}://${requestData.get(
@@ -75,6 +80,35 @@ class UserService {
     } catch (error) {
       clearResetFields(requestData.body);
       await SaveUser(requestData.body);
+      throw new Error(error.message);
+    }
+  };
+
+  resetPasswordService = async (requestData) => {
+    try {
+      // Get hashed password
+      const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(requestData.params.resettoken)
+        .digest('hex')
+        .toString();
+
+      const user = await findOne({
+        resetPasswordToken: resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        throw new Error('Invalid Token');
+      }
+
+      // Set new Password
+      user.password = requestData.body.password;
+      clearResetFields(user);
+      await saveUserWithoutValidation(user);
+
+      return user;
+    } catch (error) {
       throw new Error(error.message);
     }
   };

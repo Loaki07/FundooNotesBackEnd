@@ -8,6 +8,7 @@ const {
   displayAllUsers,
   getCurrentUserProfile,
   forgotPassword,
+  resetPassword,
 } = new UserController();
 
 /**
@@ -18,5 +19,6 @@ router.route('/login').post(logInUser);
 router.route('/users').get(protect, displayAllUsers);
 router.route('/users/myprofile').get(protect, getCurrentUserProfile);
 router.route('/forgotPassword').post(forgotPassword);
+router.route('/fundooapp/resetpassword/:resettoken').put(resetPassword);
 
 export default router;

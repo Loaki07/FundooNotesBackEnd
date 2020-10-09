@@ -7,6 +7,7 @@ const {
   findAllUsers,
   findProtectedUser,
   forgotPasswordService,
+  resetPasswordService,
 } = new UserService();
 
 class UserController {
@@ -20,7 +21,6 @@ class UserController {
     try {
       const responseData = {};
       const result = await registerNewUser(req.body);
-      console.log('registerUserResult', result);
       responseData.success = true;
       responseData.message = 'Successfully Registered User!';
       this.#sendTokenResponse(result, 200, res, responseData);
@@ -73,7 +73,27 @@ class UserController {
       const responseData = {};
       responseData.success = false;
       responseData.error = error.message;
-      console.log(error);
+      res.status(500).send(responseData);
+    }
+  };
+
+  /**
+   * @description Reset Password
+   * @route PUT /fundooapp/resetpassword/:resettoken
+   * @param {request} req
+   * @param {response} res
+   */
+  resetPassword = async (req, res) => {
+    try {
+      const responseData = {};
+      const result = await resetPasswordService(req);
+      responseData.success = true;
+      responseData.message = 'Password Reset Successfully!';
+      this.#sendTokenResponse(result, 200, res, responseData);
+    } catch (error) {
+      const responseData = {};
+      responseData.success = false;
+      responseData.error = error.message;
       res.status(500).send(responseData);
     }
   };

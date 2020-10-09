@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema(
 userSchema.pre('save', async function () {
   const saltRounds = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, saltRounds);
+  console.log(this.password);
 });
 
 // Match user entered password to hashed password in database
@@ -92,12 +93,16 @@ class UserModel {
     return await User.findById(id);
   };
 
-  findUserByEmail = async (email) => {
-    return await User.findOne({ email });
+  findOne = async (fields) => {
+    return await User.findOne(fields);
   };
 
   SaveUser = async (user) => {
     return await user.save;
+  };
+
+  saveUserWithoutValidation = async (user) => {
+    return await user.save({ validateBeforeSave: false });
   };
 
   clearResetFields = (user) => {
