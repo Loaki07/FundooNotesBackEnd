@@ -1,5 +1,6 @@
 import UserService from '../services/userServices.js';
 import { getSignedJwtToken, getResetPasswordToken } from '../utility/tokens.js';
+import { validateUserRegistration } from '../middleware/validation.js';
 
 const {
   registerNewUser,
@@ -19,6 +20,10 @@ class UserController {
    */
   registerUser = async (req, res) => {
     try {
+      const { error } = await validateUserRegistration(req.body);
+      if (error) {
+        throw new Error(error);
+      }
       const responseData = {};
       const result = await registerNewUser(req.body);
       responseData.success = true;
@@ -74,6 +79,7 @@ class UserController {
       responseData.success = false;
       responseData.error = error.message;
       res.status(500).send(responseData);
+      // next(error)
     }
   };
 
