@@ -14,9 +14,10 @@ class Validation {
 
   validateNote = async (note) => {
     const validateObject = Joi.object({
-      title: Joi.string().min(3),
+      title: Joi.string().min(3).required(),
       description: Joi.string(),
     });
+    return await validateObject.validateAsync(note);
   };
 }
 

@@ -5,6 +5,7 @@ const noteSchema = new mongoose.Schema(
     title: {
       type: String,
       minlength: [3, 'A Minimum of 3 characters is required'],
+      required: true,
     },
     description: {
       type: String,
@@ -40,6 +41,10 @@ class NoteModel {
 
   deleteNote = async (id) => {
     return await Note.findByIdAndDelete(id);
+  };
+
+  findOne = async (fields) => {
+    return await Note.findOne(fields);
   };
 }
 
