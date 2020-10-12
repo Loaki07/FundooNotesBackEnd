@@ -1,6 +1,7 @@
 import UserService from '../services/userServices.js';
 import { getSignedJwtToken, getResetPasswordToken } from '../utility/tokens.js';
-import { validateUserRegistration } from '../middleware/validation.js';
+import validation from '../middleware/validation.js';
+const { validateUserRegistration } = new validation();
 
 const {
   registerNewUser,
