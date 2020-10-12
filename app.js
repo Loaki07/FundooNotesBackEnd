@@ -5,6 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes/routes.js';
 import cookieParser from 'cookie-parser';
+import logger from './config/logger.js';
 
 dotenv.config();
 connectDB();
@@ -31,4 +32,5 @@ app.get('/', (req, res) => {
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}...`);
+  logger.log('error', `Listening on port ${process.env.PORT}...`);
 });
