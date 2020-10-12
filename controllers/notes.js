@@ -2,7 +2,13 @@ import NoteService from '../services/noteService.js';
 import validation from '../middleware/validation.js';
 const { validateNote } = new validation();
 import ErrorResponse from '../utility/errorResponse.js';
-const { createNewNote, findAllNotes, updateNoteInDb, findNoteByDb, deleteNoteInDb } = new NoteService();
+const {
+  createNewNote,
+  findAllNotes,
+  updateNoteInDb,
+  findNoteByDb,
+  deleteNoteInDb,
+} = new NoteService();
 
 class NoteController {
   createNote = async (req, res) => {
@@ -29,7 +35,7 @@ class NoteController {
     try {
       const responseData = {};
       const result = await findAllNotes();
-      if (!result || result === null) {
+      if (!result || result === null || result.length === 0) {
         throw new ErrorResponse('There are no Notes to display', 404);
       }
       responseData.success = true;
@@ -90,7 +96,7 @@ class NoteController {
       responseData.error = error.message;
       res.status(error.statusCode || 500).send(responseData);
     }
-  }
+  };
 }
 
 export default NoteController;

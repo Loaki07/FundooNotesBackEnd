@@ -20,7 +20,7 @@ const {
 } = new UserController();
 
 /**
- * Routes
+ * Auth Routes
  */
 router.route('/register').post(registerUser);
 router.route('/login').post(logInUser);
@@ -29,11 +29,15 @@ router.route('/users/myprofile').get(auth, getCurrentUserProfile);
 router.route('/forgotPassword').post(forgotPassword);
 router.route('/fundooapp/resetpassword/:resettoken').put(resetPassword);
 
-router.route('/notes').get(auth, getNotes).post(createNote);
+/**
+ * Note Routes
+ */
+router.route('/notes').get(auth, getNotes).post(auth, createNote);
 router
   .route('/notes/:id')
-  .get(getSingleNote)
-  .post(updateSingleNote)
-  .delete(deleteSingleNote);
+  .get(auth, getSingleNote)
+  .post(auth, createNote)
+  .delete(auth, deleteSingleNote)
+  .put(auth, updateSingleNote);
 
 export default router;

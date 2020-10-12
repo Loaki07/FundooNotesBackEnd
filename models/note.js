@@ -36,7 +36,7 @@ class NoteModel {
   };
 
   updateNote = async (id, updatedNoteObject) => {
-    return await Note.findByIdAndUpdate(
+    return await Note.findOneAndUpdate(
       id,
       {
         $set: updatedNoteObject,
