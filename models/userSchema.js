@@ -55,7 +55,7 @@ const User = mongoose.model('User', userSchema);
 class UserModel {
   createUser = async (data) => {
     const { firstName, lastName, email, password } = data;
-    return User.create({
+    return await User.create({
       firstName,
       lastName,
       email,
@@ -75,7 +75,7 @@ class UserModel {
     return await User.findOne(fields);
   };
 
-  SaveUser = async (user) => {
+  saveUser = async (user) => {
     return await user.save;
   };
 

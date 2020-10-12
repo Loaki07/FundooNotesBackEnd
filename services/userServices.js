@@ -7,7 +7,7 @@ const {
   getAllUsers,
   getProtectedUser,
   findOne,
-  SaveUser,
+  saveUser,
   clearResetFields,
   saveUserWithoutValidation,
 } = new UserModel();
@@ -88,7 +88,7 @@ class UserService {
       return foundUser;
     } catch (error) {
       clearResetFields(requestData.body);
-      await SaveUser(requestData.body);
+      await saveUser(requestData.body);
       throw new Error(error.message);
     }
   };
