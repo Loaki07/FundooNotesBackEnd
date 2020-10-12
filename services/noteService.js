@@ -31,6 +31,43 @@ class NoteService {
       throw new ErrorResponse(error.message, error.statusCode);
     }
   };
+
+  updateNoteInDb = async (id, data) => {
+    try {
+      console.log(id, data);
+      const result = await updateNote(id, data);
+      if (result instanceof Error) {
+        throw new ErrorResponse(error.message, 400);
+      }
+      return result;
+    } catch (error) {
+      throw new ErrorResponse(error.message, error.statusCode);
+    }
+  };
+
+  findNoteByDb = async (id) => {
+    try {
+      const result = await findOne({ _id: id });
+      if (result instanceof Error) {
+        throw new ErrorResponse(error.message, 400);
+      }
+      return result;
+    } catch (error) {
+      throw new ErrorResponse(error.message, error.statusCode);
+    }
+  };
+
+  deleteNoteInDb = async (id) => {
+    try {
+      const result = await deleteNote({ _id: id });
+      if (result instanceof Error) {
+        throw new ErrorResponse(error.message, 400);
+      }
+      return result;
+    } catch (error) {
+      throw new ErrorResponse(error.message, error.statusCode);
+    }
+  }
 }
 
 export default NoteService;

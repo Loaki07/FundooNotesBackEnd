@@ -35,8 +35,17 @@ class NoteModel {
     return await note.save;
   };
 
-  updateNote = async (id) => {
-    return await Note.findByIdAndUpdate(id, { new: true, useFindAndModify: false });
+  updateNote = async (id, updatedNoteObject) => {
+    return await Note.findByIdAndUpdate(
+      id,
+      {
+        $set: updatedNoteObject,
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
   };
 
   deleteNote = async (id) => {
