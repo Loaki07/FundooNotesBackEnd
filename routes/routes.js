@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import UserController from '../controllers/userController.js';
 import NoteController from '../controllers/notes.js';
-import { protect } from '../middleware/authorization.js';
+import { auth } from '../middleware/authorization.js';
 const {
   createNote,
   getNotes,
@@ -24,12 +24,12 @@ const {
  */
 router.route('/register').post(registerUser);
 router.route('/login').post(logInUser);
-router.route('/users').get(protect, displayAllUsers);
-router.route('/users/myprofile').get(protect, getCurrentUserProfile);
+router.route('/users').get(auth, displayAllUsers);
+router.route('/users/myprofile').get(auth, getCurrentUserProfile);
 router.route('/forgotPassword').post(forgotPassword);
 router.route('/fundooapp/resetpassword/:resettoken').put(resetPassword);
 
-router.route('/notes').get(getNotes).post(createNote);
+router.route('/notes').get(auth, getNotes).post(createNote);
 router
   .route('/notes/:id')
   .get(getSingleNote)

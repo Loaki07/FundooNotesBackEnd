@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models/userSchema.js';
 
-const protect = async (req, res, next) => {
+const auth = async (req, res, next) => {
   try {
     let token;
 
@@ -25,4 +25,4 @@ const protect = async (req, res, next) => {
   }
 };
 
-export { protect };
+export { auth };
