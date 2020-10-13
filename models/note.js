@@ -1,4 +1,3 @@
-import { string } from '@hapi/joi';
 import mongoose from 'mongoose';
 
 const noteSchema = new mongoose.Schema(

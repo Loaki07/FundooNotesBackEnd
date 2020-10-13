@@ -17,7 +17,7 @@ const app = express();
 app.use((req, res, next) => {
   logger.info(req.body);
   let oldSend = res.send;
-  res.send = function (data) {
+  res.send =  (data) => {
     logger.info(data);
     oldSend.apply(res, arguments);
   };
@@ -30,7 +30,10 @@ app.use(cookieParser());
 app.use('/', routes);
 
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to the Fundoo Notes Application');
+  res.status(200).send({
+    success: true,
+    message: 'Welcome to the Fundoo Notes Application',
+  });
 });
 
 /**
