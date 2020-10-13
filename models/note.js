@@ -1,3 +1,4 @@
+import { string } from '@hapi/joi';
 import mongoose from 'mongoose';
 
 const noteSchema = new mongoose.Schema(
@@ -10,6 +11,29 @@ const noteSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    color: String,
+    image: String,
+    pinnded: {
+      type: Boolean,
+      default: false,
+    },
+    remaindMe: {
+      type: String,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    options: [
+      {
+        deleteNote: String,
+        addLabel: String,
+        addDrawing: String,
+        makeACopy: String,
+        showTickBoxes: Boolean,
+        copyToGoogleDocs: String,
+      },
+    ],
   },
   {
     timestamps: true,
