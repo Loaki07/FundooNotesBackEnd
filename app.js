@@ -22,7 +22,7 @@ app.use((req, res, next) => {
     oldSend.apply(res, arguments);
   };
   next();
-});
+}); 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

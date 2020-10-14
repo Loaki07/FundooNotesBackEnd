@@ -16,8 +16,8 @@ class UserController {
   /**
    * @description Register User
    * @route POST /register
-   * @param {request} req
-   * @param {response} res
+   * @param {object} req
+   * @param {object} res
    */
   registerUser = async (req, res) => {
     try {
@@ -41,8 +41,8 @@ class UserController {
   /**
    * @description LogIn User
    * @route POST /login
-   * @param {request} req
-   * @param {response} res
+   * @param {object} req
+   * @param {object} res
    */
   logInUser = async (req, res) => {
     try {
@@ -63,9 +63,9 @@ class UserController {
   /**
    * @description Forgot Password
    * @route POST /forgotPassword
-   * @param {request} req
-   * @param {response} res
-   * @param {next operation} next
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
    */
   forgotPassword = async (req, res, next) => {
     try {
@@ -87,8 +87,8 @@ class UserController {
   /**
    * @description Reset Password
    * @route PUT /fundooapp/resetpassword/:resettoken
-   * @param {request} req
-   * @param {response} res
+   * @param {object} req
+   * @param {object} res
    */
   resetPassword = async (req, res) => {
     try {
@@ -108,8 +108,8 @@ class UserController {
   /**
    * @description Display all the users from the dataBase
    * @route GET /users
-   * @param {request} req
-   * @param {response} res
+   * @param {object} req
+   * @param {object} res
    */
   displayAllUsers = async (req, res) => {
     try {
@@ -148,7 +148,7 @@ class UserController {
 
   /**
    * @description Validating User Input for log In
-   * @param {request.body} data
+   * @param {object} data
    */
   #validateUserLogIn = (data) => {
     const { email, password } = data;
@@ -163,10 +163,10 @@ class UserController {
 
   /**
    * @description Store the JWT Token in a cookie and send as response
-   * @param {User} user
-   * @param {statusCode} statusCode
-   * @param {response} res
-   * @param {responseObject} responseObject
+   * @param {object} user
+   * @param {object} statusCode
+   * @param {object} res
+   * @param {object} responseObject
    */
   #sendTokenResponse = (user, statusCode, res, responseObject) => {
     const token = getSignedJwtToken(user._id);

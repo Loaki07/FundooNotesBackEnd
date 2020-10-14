@@ -1,4 +1,4 @@
-import { UserModel } from '../models/userSchema.js';
+import { UserModel } from '../models/user.js';
 import { getResetPasswordToken } from '../utility/tokens.js';
 import crypto from 'crypto';
 import sendEmail from '../utility/sendEmail.js';
