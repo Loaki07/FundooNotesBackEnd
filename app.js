@@ -40,7 +40,12 @@ app.get('/', (req, res) => {
  * Server
  */
 
-// app.use('/*', 'Page Does not exist!');
+app.use('*', (req, res) => {
+  res.status(404).send({
+    success: false,
+    message: 'Page Does not exist',
+  });
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}...`);
