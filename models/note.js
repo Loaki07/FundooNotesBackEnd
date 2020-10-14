@@ -10,29 +10,33 @@ const noteSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    color: String,
-    image: String,
-    pinnded: {
+    color: {
+      type: String,
+      enum: [
+        'yellow',
+        'orange',
+        'red',
+        'green',
+        'teal',
+        'purple',
+        'pink',
+        'brown',
+        'grey',
+      ],
+      default: 'yellow',
+    },
+    image: URL,
+    isPinned: {
       type: Boolean,
       default: false,
     },
     remaindMe: {
       type: String,
     },
-    archived: {
+    isArchived: {
       type: Boolean,
       default: false,
     },
-    options: [
-      {
-        deleteNote: String,
-        addLabel: String,
-        addDrawing: String,
-        makeACopy: String,
-        showTickBoxes: Boolean,
-        copyToGoogleDocs: String,
-      },
-    ],
   },
   {
     timestamps: true,
