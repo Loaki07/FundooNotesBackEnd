@@ -34,7 +34,6 @@ class NoteService {
 
   updateNoteInDb = async (id, data) => {
     try {
-      console.log(id, data);
       const result = await updateNote(id, data);
       if (result instanceof Error) {
         throw new ErrorResponse(error.message, 400);

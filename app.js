@@ -17,12 +17,12 @@ const app = express();
 app.use((req, res, next) => {
   logger.info(req.body);
   let oldSend = res.send;
-  res.send =  (data) => {
+  res.send = function (data) {
     logger.info(data);
     oldSend.apply(res, arguments);
   };
   next();
-}); 
+});
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

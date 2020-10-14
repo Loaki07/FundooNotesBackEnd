@@ -25,7 +25,9 @@ const noteSchema = new mongoose.Schema(
       ],
       default: 'yellow',
     },
-    image: URL,
+    image: {
+      type: String,
+    },
     useCheckBox: {
       type: Boolean,
       default: false,
