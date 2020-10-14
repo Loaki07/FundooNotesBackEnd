@@ -1,7 +1,7 @@
 import NoteService from '../services/noteService.js';
 import validation from '../middleware/validation.js';
 const { validateNote } = new validation();
-import ErrorResponse from '../utility/errorResponse.js';
+import { ErrorResponse, noteErrors } from '../utility/errorResponse.js';
 const {
   createNewNote,
   findAllNotes,
@@ -36,7 +36,7 @@ class NoteController {
       const responseData = {};
       const result = await findAllNotes();
       if (!result || result === null || result.length === 0) {
-        throw new ErrorResponse('There are no Notes to display', 404);
+        throw new ErrorResponse(noteErrors[2].error, noteErrors[2].statusCode);
       }
       responseData.success = true;
       responseData.message = 'Displaying all Notes';

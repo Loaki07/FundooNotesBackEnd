@@ -1,5 +1,5 @@
 import { NoteModel } from '../models/note.js';
-import ErrorResponse from '../utility/errorResponse.js';
+import { ErrorResponse, noteErrors } from '../utility/errorResponse.js';
 const {
   createNote,
   getAllNotes,
@@ -16,7 +16,7 @@ class NoteService {
         title: data.title,
       });
       if (isNotePresent) {
-        throw new ErrorResponse(`Note with title '${data.title}' already exists!`, 400);
+        throw new ErrorResponse(noteErrors[1].error, noteErrors[1].statusCode);
       }
       return await createNote(data);
     } catch (error) {
@@ -66,7 +66,7 @@ class NoteService {
     } catch (error) {
       throw new ErrorResponse(error.message, error.statusCode);
     }
-  }
+  };
 }
 
 export default NoteService;
