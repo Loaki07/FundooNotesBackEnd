@@ -26,6 +26,10 @@ const noteSchema = new mongoose.Schema(
       default: 'yellow',
     },
     image: URL,
+    useCheckBox: {
+      type: Boolean,
+      default: false,
+    },
     isPinned: {
       type: Boolean,
       default: false,
@@ -47,10 +51,25 @@ const Note = mongoose.model('Note', noteSchema);
 
 class NoteModel {
   createNote = async (data) => {
-    const { title, description } = data;
+    const {
+      title,
+      description,
+      color,
+      image,
+      useCheckBox,
+      isPinned,
+      remaindMe,
+      isArchived,
+    } = data;
     return await Note.create({
       title,
       description,
+      color,
+      image,
+      useCheckBox,
+      isPinned,
+      remaindMe,
+      isArchived,
     });
   };
 
