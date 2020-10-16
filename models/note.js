@@ -25,7 +25,7 @@ const noteSchema = new mongoose.Schema(
       ],
       default: 'yellow',
     },
-    image: {
+    imageUrl: {
       type: String,
     },
     useCheckBox: {
@@ -76,15 +76,15 @@ class NoteModel {
   };
 
   getAllNotes = async () => {
-    return await Note.find();
+    return Note.find();
   };
 
   saveNote = async (note) => {
-    return await note.save;
+    return note.save;
   };
 
   updateNote = async (id, updatedNoteObject) => {
-    return await Note.findOneAndUpdate(
+    return Note.findOneAndUpdate(
       id,
       {
         $set: updatedNoteObject,
@@ -97,11 +97,11 @@ class NoteModel {
   };
 
   deleteNote = async (id) => {
-    return await Note.findByIdAndDelete(id);
+    return Note.findByIdAndDelete(id);
   };
 
   findOne = async (fields) => {
-    return await Note.findOne(fields);
+    return Note.findOne(fields);
   };
 }
 

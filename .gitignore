@@ -105,3 +105,4 @@ dist
 
 node_modules/
 *.rest
+rest-client/

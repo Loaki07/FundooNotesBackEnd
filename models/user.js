@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
       minlength: [3, 'A Minimum of 3 characters is required'],
       required: true,
     },
-    email: {
+    emailId: {
       type: String,
       required: true,
       unique: true,
@@ -47,40 +47,40 @@ userSchema.pre('save', async function () {
 
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  return bcrypt.compare(enteredPassword, this.password);
 };
 
 const User = mongoose.model('User', userSchema);
 
 class UserModel {
   createUser = async (data) => {
-    const { firstName, lastName, email, password } = data;
-    return await User.create({
+    const { firstName, lastName, emailId, password } = data;
+    return User.create({
       firstName,
       lastName,
-      email,
+      emailId,
       password,
     });
   };
 
   getAllUsers = async () => {
-    return await User.find();
+    return User.find();
   };
 
   getProtectedUser = async (id) => {
-    return await User.findById(id);
+    return User.findById(id);
   };
 
   findOne = async (fields) => {
-    return await User.findOne(fields);
+    return User.findOne(fields);
   };
 
   saveUser = async (user) => {
-    return await user.save;
+    return user.save;
   };
 
   saveUserWithoutValidation = async (user) => {
-    return await user.save({ validateBeforeSave: false });
+    return user.save({ validateBeforeSave: false });
   };
 
   clearResetFields = (user) => {

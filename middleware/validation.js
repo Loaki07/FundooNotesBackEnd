@@ -5,7 +5,7 @@ class Validation {
     const validateObject = Joi.object({
       firstName: Joi.string().min(3).required(),
       lastName: Joi.string().min(3).required(),
-      email: Joi.string().email().lowercase().required(),
+      emailId: Joi.string().email().lowercase().required(),
       password: Joi.string().min(6).required(),
     });
 

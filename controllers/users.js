@@ -1,6 +1,7 @@
 import UserService from '../services/userServices.js';
 import { getSignedJwtToken, getResetPasswordToken } from '../utility/tokens.js';
 import validation from '../middleware/validation.js';
+import logger from '../config/logger.js';
 const { validateUserRegistration } = new validation();
 
 const {
@@ -20,20 +21,21 @@ class UserController {
    * @param {object} res
    */
   registerUser = async (req, res) => {
+    const responseData = {};
     try {
       const { error } = await validateUserRegistration(req.body);
       if (error) {
         throw new Error(error);
       }
-      const responseData = {};
       const result = await registerNewUser(req.body);
       responseData.success = true;
       responseData.message = 'Successfully Registered User!';
+      logger.info(responseData.message);
       this.#sendTokenResponse(result, 200, res, responseData);
     } catch (error) {
-      const responseData = {};
       responseData.success = false;
-      responseData.error = error.message;
+      responseData.message = error.message;
+      logger.error(error.message);
       res.status(500).send(responseData);
     }
   };
@@ -45,17 +47,18 @@ class UserController {
    * @param {object} res
    */
   logInUser = async (req, res) => {
+    const responseData = {};
     try {
-      const responseData = {};
       this.#validateUserLogIn(req.body);
       const result = await logInByUserName(req.body);
       responseData.success = true;
       responseData.message = 'Successfully Logged In!';
+      logger.info(responseData.message);
       this.#sendTokenResponse(result, 200, res, responseData);
     } catch (error) {
-      const responseData = {};
       responseData.success = false;
-      responseData.error = error.message;
+      responseData.message = error.message;
+      logger.error(error.message);
       res.status(500).send(responseData);
     }
   };
@@ -68,17 +71,18 @@ class UserController {
    * @param {function} next
    */
   forgotPassword = async (req, res, next) => {
+    const responseData = {};
     try {
-      const responseData = {};
       const user = await forgotPasswordService(req);
       responseData.success = true;
       responseData.message = `Forgot Password\n\nEmail Sent to reset the Password`;
       responseData.data = user;
+      logger.info(responseData.message);
       res.status(200).send(responseData);
     } catch (error) {
-      const responseData = {};
       responseData.success = false;
-      responseData.error = error.message;
+      responseData.message = error.message;
+      logger.error(error.message);
       res.status(500).send(responseData);
       // next(error)
     }
@@ -91,16 +95,17 @@ class UserController {
    * @param {object} res
    */
   resetPassword = async (req, res) => {
+    const responseData = {};
     try {
-      const responseData = {};
       const result = await resetPasswordService(req);
       responseData.success = true;
       responseData.message = 'Password Reset Successfully!';
+      logger.info(responseData.message);
       this.#sendTokenResponse(result, 200, res, responseData);
     } catch (error) {
-      const responseData = {};
       responseData.success = false;
-      responseData.error = error.message;
+      responseData.message = error.message;
+      logger.error(error.message);
       res.status(500).send(responseData);
     }
   };
@@ -112,8 +117,8 @@ class UserController {
    * @param {object} res
    */
   displayAllUsers = async (req, res) => {
+    const responseData = {};
     try {
-      const responseData = {};
       const result = await findAllUsers();
       if (!result || result === null) {
         throw new Error('Database is Empty!');
@@ -121,27 +126,29 @@ class UserController {
       responseData.success = true;
       responseData.message = 'Retreived Users From DataBase';
       responseData.data = result;
+      logger.info(responseData.message);
       res.status(200).send(responseData);
     } catch (error) {
-      const responseData = {};
       responseData.success = false;
-      responseData.error = error.message;
+      responseData.message = error.message;
+      logger.error(error.message);
       res.status(500).send(responseData);
     }
   };
 
   getCurrentUserProfile = async (req, res, next) => {
+    const responseData = {};
     try {
-      const responseData = {};
       const user = await findProtectedUser(req.user._id);
       responseData.success = true;
       responseData.message = 'Displaying details for the Current User';
       responseData.data = user;
+      logger.info(responseData.message);
       res.status(200).send(responseData);
     } catch (error) {
-      const responseData = {};
       responseData.success = false;
-      responseData.error = error.message;
+      responseData.message = error.message;
+      logger.error(error.message);
       res.status(500).send(responseData);
     }
   };
