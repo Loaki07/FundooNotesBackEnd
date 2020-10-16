@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user.js';
+import { UserModel } from '../models/user.js';
+const { getProtectedUser } = new UserModel();
 
 const auth = async (req, res, next) => {
   try {
@@ -15,7 +16,11 @@ const auth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded._id);
+    req.user = await getProtectedUser(decoded._id);
+
+    if (!req.user) {
+      throw new Error('Invalid/Expired Token');
+    }
     next();
   } catch (error) {
     res.status(401).send({

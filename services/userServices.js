@@ -16,10 +16,10 @@ class UserService {
   registerNewUser = async (data) => {
     try {
       const isUserPresent = await findOne({
-        email: data.email,
+        emailId: data.emailId,
       });
       if (isUserPresent) {
-        throw new Error(`User with email '${data.email}' already exists!`);
+        throw new Error(`User with email '${data.emailId}' already exists!`);
       }
       return await createUser(data);
     } catch (error) {
@@ -29,11 +29,11 @@ class UserService {
 
   logInByUserName = async (data) => {
     try {
-      const { email, password } = data;
+      const { emailId, password } = data;
 
-      const foundUser = await findOne({ email });
+      const foundUser = await findOne({ emailId });
       if (foundUser === null || !foundUser) {
-        throw new Error(`User with email ${email}, Not Found!`);
+        throw new Error(`User with email ${emailId}, Not Found!`);
       }
       // Check if password matches
       const isMatch = await foundUser.matchPassword(password);
@@ -54,10 +54,10 @@ class UserService {
   forgotPasswordService = async (requestData) => {
     try {
       const foundUser = await findOne({
-        email: requestData.body.email,
+        emailId: requestData.body.emailId,
       });
       if (!foundUser) {
-        throw new Error(`User with email '${requestData.body.email}' does not exist`);
+        throw new Error(`User with email '${requestData.body.emailId}' does not exist`);
       }
 
       const resetToken = getResetPasswordToken();
@@ -80,7 +80,7 @@ class UserService {
 
       // Send the reset link to the user
       await sendEmail({
-        email: requestData.body.email,
+        emailId: requestData.body.emailId,
         subject: 'FundooApp Password Reset Link',
         message,
       });

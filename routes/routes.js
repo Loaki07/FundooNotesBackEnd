@@ -9,6 +9,7 @@ const {
   updateSingleNote,
   getSingleNote,
   deleteSingleNote,
+  getUserNotes,
 } = new NoteController();
 const {
   registerUser,
@@ -25,19 +26,23 @@ const {
 router.route('/register').post(registerUser);
 router.route('/login').post(logInUser);
 router.route('/users').get(auth, displayAllUsers);
-router.route('/users/myprofile').get(auth, getCurrentUserProfile);
 router.route('/forgotPassword').post(forgotPassword);
 router.route('/fundooapp/resetpassword/:resettoken').put(resetPassword);
 
 /**
  * Note Routes
  */
-router.route('/notes').get(auth, getNotes).post(auth, createNote);
+router.route('/notes').get(auth, getNotes);
 router
   .route('/notes/:id')
   .get(auth, getSingleNote)
-  .post(auth, createNote)
   .delete(auth, deleteSingleNote)
   .put(auth, updateSingleNote);
+
+/**
+ * User Profile
+ */
+router.route('/users/myprofile').get(auth, getCurrentUserProfile);
+router.route('/users/myprofile/notes').get(auth, getUserNotes).post(auth, createNote);
 
 export default router;

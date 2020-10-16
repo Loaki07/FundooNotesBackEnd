@@ -7,6 +7,7 @@ const {
   updateNote,
   deleteNote,
   findOne,
+  find,
 } = new NoteModel();
 
 class NoteService {
@@ -44,9 +45,9 @@ class NoteService {
     }
   };
 
-  findNoteByDb = async (id) => {
+  findNoteByDb = async (fields) => {
     try {
-      const result = await findOne({ _id: id });
+      const result = await findOne(fields);
       if (result instanceof Error) {
         throw new ErrorResponse(error.message, 400);
       }
@@ -59,6 +60,18 @@ class NoteService {
   deleteNoteInDb = async (id) => {
     try {
       const result = await deleteNote({ _id: id });
+      if (result instanceof Error) {
+        throw new ErrorResponse(error.message, 400);
+      }
+      return result;
+    } catch (error) {
+      throw new ErrorResponse(error.message, error.statusCode);
+    }
+  };
+
+  getNotesByUserId = async (fields) => {
+    try {
+      const result = await find(fields);
       if (result instanceof Error) {
         throw new ErrorResponse(error.message, 400);
       }

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const noteSchema = new mongoose.Schema(
   {
@@ -43,9 +44,18 @@ const noteSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
+    strict: true,
   }
 );
 
@@ -62,6 +72,7 @@ class NoteModel {
       isPinned,
       remaindMe,
       isArchived,
+      userId,
     } = data;
     return await Note.create({
       title,
@@ -72,6 +83,7 @@ class NoteModel {
       isPinned,
       remaindMe,
       isArchived,
+      userId,
     });
   };
 
@@ -102,6 +114,10 @@ class NoteModel {
 
   findOne = async (fields) => {
     return Note.findOne(fields);
+  };
+
+  find = async (fields) => {
+    return Note.find(fields);
   };
 }
 

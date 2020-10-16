@@ -21,6 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.7",
     "nodemailer": "^6.4.13",
+    "redis": "^3.0.2",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.5"
   }

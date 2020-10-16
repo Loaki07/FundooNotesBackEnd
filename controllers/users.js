@@ -158,12 +158,12 @@ class UserController {
    * @param {object} data
    */
   #validateUserLogIn = (data) => {
-    const { email, password } = data;
-    if (!email && !password) {
+    const { emailId, password } = data;
+    if (!emailId && !password) {
       throw new Error('Please provide an email and password!');
     } else if (!password) {
       throw new Error('Password cannot be empty!');
-    } else if (!email) {
+    } else if (!emailId) {
       throw new Error('Email cannot be empty!');
     }
   };

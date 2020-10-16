@@ -9,6 +9,7 @@ const {
   updateNoteInDb,
   findNoteByDb,
   deleteNoteInDb,
+  getNotesByUserId,
 } = new NoteService();
 
 class NoteController {
@@ -19,6 +20,7 @@ class NoteController {
       if (error) {
         throw new ErrorResponse(`${error.message}`, 401);
       }
+      req.body.userId = req.user._id;
       const result = await createNewNote(req.body);
       responseData.success = true;
       responseData.message = 'Successfully Created Note!';
@@ -73,9 +75,12 @@ class NoteController {
   getSingleNote = async (req, res) => {
     const responseData = {};
     try {
-      const result = await findNoteByDb(req.params.id);
+      const result = await findNoteByDb({
+        _id: req.params.id,
+        userId: req.user._id,
+      });
       responseData.success = true;
-      responseData.message = 'Found Note';
+      responseData.message = 'Note Found!';
       responseData.data = result;
       logger.info(responseData.message);
       res.status(200).send(responseData);
@@ -93,6 +98,25 @@ class NoteController {
       const result = await deleteNoteInDb(req.params.id);
       responseData.success = true;
       responseData.message = 'Deleted Note';
+      responseData.data = result;
+      logger.info(responseData.message);
+      res.status(200).send(responseData);
+    } catch (error) {
+      responseData.success = false;
+      responseData.message = error.message;
+      logger.error(error.message);
+      res.status(error.statusCode || 500).send(responseData);
+    }
+  };
+
+  getUserNotes = async (req, res) => {
+    const responseData = {};
+    try {
+      const result = await getNotesByUserId({
+        userId: req.user._id,
+      });
+      responseData.success = true;
+      responseData.message = 'User Notes';
       responseData.data = result;
       logger.info(responseData.message);
       res.status(200).send(responseData);
