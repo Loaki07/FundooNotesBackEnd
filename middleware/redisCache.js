@@ -34,6 +34,11 @@ class RedisCache {
   setDataintoCache = (userId, data) => {
     client.set(`User:${userId}`, JSON.stringify(data));
   };
+
+  clearCache = () => {
+    console.log(`Redis Cache cleared and is ready for use...`);
+    client.flushall();
+  };
 }
 
 export default RedisCache;

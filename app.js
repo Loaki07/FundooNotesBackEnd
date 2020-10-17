@@ -6,6 +6,9 @@ import bodyParser from 'body-parser';
 import routes from './routes/routes.js';
 import cookieParser from 'cookie-parser';
 import logger from './config/logger.js';
+import RedisCache from './middleware/redisCache.js';
+
+const { clearCache } = new RedisCache();
 
 dotenv.config();
 connectDB();
@@ -49,4 +52,5 @@ app.use('*', (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}...`);
   logger.info(`Listening on port ${process.env.PORT}...`);
+  clearCache();
 });
