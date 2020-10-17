@@ -155,6 +155,12 @@ class UserController {
     }
   };
 
+  /**
+   * @description Verifing the email using JWT and email verification is confirmed
+   * @route GET /fundooapp/verify-email/:token
+   * @param {object} req
+   * @param {object} res
+   */
   emailVerification = async (req, res) => {
     const responseData = {};
     try {

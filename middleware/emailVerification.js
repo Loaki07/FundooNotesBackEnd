@@ -1,8 +1,6 @@
 import sendEmail from '../utility/sendEmail.js';
 import logger from '../config/logger.js';
-import {
-  getSignedEmailVerificationToken,
-} from '../utility/tokens.js';
+import { getSignedEmailVerificationToken } from '../utility/tokens.js';
 import { UserModel } from '../models/user.js';
 const { findOne } = new UserModel();
 
@@ -27,7 +25,7 @@ const verifyEmail = async (req, res, next) => {
         subject: 'FundooApp Email Verification',
         message,
       });
-      res.redirect('/login');
+      // res.redirect('/login');
       logger.error('User Email Verification is not complete!');
     } else {
       next();
