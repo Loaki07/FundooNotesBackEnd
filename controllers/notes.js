@@ -3,6 +3,8 @@ import validation from '../middleware/validation.js';
 const { validateNote } = new validation();
 import { ErrorResponse, noteErrors } from '../utility/errorResponse.js';
 import logger from '../config/logger.js';
+import RedisCache from '../middleware/redisCache.js';
+const { setDataintoCache } = new RedisCache();
 const {
   createNewNote,
   findAllNotes,
@@ -112,11 +114,13 @@ class NoteController {
   getUserNotes = async (req, res) => {
     const responseData = {};
     try {
+      let id = req.user._id;
       const result = await getNotesByUserId({
-        userId: req.user._id,
+        userId: id,
       });
+      setDataintoCache(id, result);
       responseData.success = true;
-      responseData.message = 'User Notes';
+      responseData.message = 'User Notes form DB';
       responseData.data = result;
       logger.info(responseData.message);
       res.status(200).send(responseData);

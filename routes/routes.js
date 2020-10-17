@@ -2,6 +2,7 @@ import express from 'express';
 const router = express.Router();
 import UserController from '../controllers/users.js';
 import NoteController from '../controllers/notes.js';
+import RedisCache from '../middleware/redisCache.js';
 import { auth } from '../middleware/authorization.js';
 const {
   createNote,
@@ -19,6 +20,7 @@ const {
   forgotPassword,
   resetPassword,
 } = new UserController();
+const { getDataFromCache } = new RedisCache();
 
 /**
  * Auth Routes
@@ -43,6 +45,9 @@ router
  * User Profile
  */
 router.route('/users/myprofile').get(auth, getCurrentUserProfile);
-router.route('/users/myprofile/notes').get(auth, getUserNotes).post(auth, createNote);
+router
+  .route('/users/myprofile/notes')
+  .get(auth, getDataFromCache, getUserNotes)
+  .post(auth, createNote);
 
 export default router;

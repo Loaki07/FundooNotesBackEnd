@@ -74,6 +74,8 @@ class NoteService {
       const result = await find(fields);
       if (result instanceof Error) {
         throw new ErrorResponse(error.message, 400);
+      } else if (result === null || result.length === 0) {
+        throw new ErrorResponse(`Empty`, 400);
       }
       return result;
     } catch (error) {
