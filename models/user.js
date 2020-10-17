@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: true,
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },
@@ -54,12 +58,13 @@ const User = mongoose.model('User', userSchema);
 
 class UserModel {
   createUser = async (data) => {
-    const { firstName, lastName, emailId, password } = data;
+    const { firstName, lastName, emailId, password, isEmailVerified } = data;
     return User.create({
       firstName,
       lastName,
       emailId,
       password,
+      isEmailVerified,
     });
   };
 
@@ -77,6 +82,19 @@ class UserModel {
 
   saveUser = async (user) => {
     return user.save;
+  };
+
+  updateUser = async (id, updatedUserObject) => {
+    return User.findOneAndUpdate(
+      id,
+      {
+        $set: updatedUserObject,
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
   };
 
   saveUserWithoutValidation = async (user) => {

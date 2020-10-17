@@ -10,6 +10,7 @@ const {
   saveUser,
   clearResetFields,
   saveUserWithoutValidation,
+  updateUser,
 } = new UserModel();
 
 class UserService {
@@ -117,6 +118,14 @@ class UserService {
       await saveUserWithoutValidation(user);
 
       return user;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  updateUserInDb = async (id, updatedUserObject) => {
+    try {
+      await updateUser(id, updatedUserObject);
     } catch (error) {
       throw new Error(error.message);
     }

@@ -4,6 +4,7 @@ import UserController from '../controllers/users.js';
 import NoteController from '../controllers/notes.js';
 import RedisCache from '../middleware/redisCache.js';
 import { auth } from '../middleware/authorization.js';
+import { verifyEmail } from '../middleware/emailVerification.js';
 const {
   createNote,
   getNotes,
@@ -19,6 +20,7 @@ const {
   getCurrentUserProfile,
   forgotPassword,
   resetPassword,
+  emailVerification,
 } = new UserController();
 const { getDataFromCache } = new RedisCache();
 
@@ -26,7 +28,7 @@ const { getDataFromCache } = new RedisCache();
  * Auth Routes
  */
 router.route('/register').post(registerUser);
-router.route('/login').post(logInUser);
+router.route('/login').post(verifyEmail, logInUser);
 router.route('/users').get(auth, displayAllUsers);
 router.route('/forgotPassword').post(forgotPassword);
 router.route('/fundooapp/resetpassword/:resettoken').put(resetPassword);
@@ -49,5 +51,6 @@ router
   .route('/users/myprofile/notes')
   .get(auth, getDataFromCache, getUserNotes)
   .post(auth, createNote);
+router.route('/fundooapp/verify-email/:token').get(emailVerification);
 
 export default router;

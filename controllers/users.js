@@ -1,6 +1,7 @@
 import UserService from '../services/userServices.js';
 import { getSignedJwtToken, getResetPasswordToken } from '../utility/tokens.js';
 import validation from '../middleware/validation.js';
+import { verifyEmailToken } from '../utility/tokens.js';
 import logger from '../config/logger.js';
 const { validateUserRegistration } = new validation();
 
@@ -11,6 +12,7 @@ const {
   findProtectedUser,
   forgotPasswordService,
   resetPasswordService,
+  updateUserInDb,
 } = new UserService();
 
 class UserController {
@@ -145,6 +147,23 @@ class UserController {
       responseData.data = user;
       logger.info(responseData.message);
       res.status(200).send(responseData);
+    } catch (error) {
+      responseData.success = false;
+      responseData.message = error.message;
+      logger.error(error.message);
+      res.status(500).send(responseData);
+    }
+  };
+
+  emailVerification = async (req, res) => {
+    const responseData = {};
+    try {
+      const result = verifyEmailToken(req.params.token);
+      updateUserInDb(result.emailId, {
+        isEmailVerified: true,
+      });
+      logger.info('User EmailId is Verified');
+      res.redirect('/login');
     } catch (error) {
       responseData.success = false;
       responseData.message = error.message;

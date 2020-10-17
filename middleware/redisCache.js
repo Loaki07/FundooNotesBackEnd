@@ -10,7 +10,6 @@ const client = redis.createClient(REDIS_PORT);
 class RedisCache {
   getDataFromCache = (req, res, next) => {
     const responseData = {};
-
     client.get(`User:${req.user._id}`, (err, data) => {
       if (err) {
         responseData.success = false;
@@ -37,6 +36,7 @@ class RedisCache {
 
   clearCache = () => {
     console.log(`Redis Cache cleared and is ready for use...`);
+    logger.info(`Redis Cache cleared and is ready for use...`);
     client.flushall();
   };
 }

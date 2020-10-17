@@ -18,4 +18,19 @@ const getResetPasswordToken = () => {
   return resetToken;
 };
 
-export { getSignedJwtToken, getResetPasswordToken };
+const getSignedEmailVerificationToken = (payload) => {
+  return jwt.sign(payload, process.env.EMAIL_SECRET, {
+    expiresIn: process.env.EMAIL_TOKEN_EXPIRY,
+  });
+};
+
+const verifyEmailToken = (requestToken) => {
+  return jwt.verify(requestToken, process.env.EMAIL_SECRET);
+};
+
+export {
+  getSignedJwtToken,
+  getResetPasswordToken,
+  getSignedEmailVerificationToken,
+  verifyEmailToken,
+};
