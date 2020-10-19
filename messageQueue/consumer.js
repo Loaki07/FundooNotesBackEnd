@@ -1,13 +1,17 @@
 import amqp from 'amqplib';
+import sendEmail from '../utility/sendEmail.js';
 
-consumeFromQueue = async () => {
+const consumeFromQueue = async () => {
   try {
     const connection = await amqp.connect('amqp://localhost:5672');
     const channel = await connection.createChannel();
+    if (!channel) throw new Error();
     const result = await channel.assertQueue('fundooApp');
     channel.consume('fundooApp', (message) => {
-      console.log(JSON.stringify(message));
+      // sendEmail(message);
+      console.log('From Consumer', JSON.stringify(message));
     });
+    channel.ack(message);
     console.log('Waiting for messages');
   } catch (error) {
     console.log(error);
