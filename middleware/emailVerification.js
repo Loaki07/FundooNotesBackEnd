@@ -1,4 +1,5 @@
 import sendEmail from '../utility/sendEmail.js';
+import sendToQueue from '../utility/publisher.js';
 import logger from '../config/logger.js';
 import { getSignedEmailVerificationToken } from '../utility/tokens.js';
 import { UserModel } from '../models/user.js';
