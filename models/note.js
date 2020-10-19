@@ -52,6 +52,9 @@ const noteSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    labels: {
+      type: [String],
+    },
   },
   {
     timestamps: true,
@@ -73,6 +76,7 @@ class NoteModel {
       remaindMe,
       isArchived,
       userId,
+      labels
     } = data;
     return await Note.create({
       title,
@@ -84,6 +88,7 @@ class NoteModel {
       remaindMe,
       isArchived,
       userId,
+      labels
     });
   };
 
