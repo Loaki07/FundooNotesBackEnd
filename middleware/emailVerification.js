@@ -7,7 +7,6 @@ import { UserModel } from '../models/user.js';
 const { findOne } = new UserModel();
 
 const verifyEmail = async (req, res, next) => {
-  console.log('At Email Auth');
   const responseData = {};
   try {
     const { emailId } = req.body;
@@ -23,12 +22,12 @@ const verifyEmail = async (req, res, next) => {
 
       const message = `Please click this email to confirm your email: <a href=${verificationUrl}>${verificationUrl}</a>`;
 
-      sendToQueue({
+      await sendToQueue({
         emailId,
         subject: 'FundooApp Email Verification',
         message,
       });
-      // consumeFromQueue()
+      await consumeFromQueue()
       // res.redirect('/login');
       logger.error('User Email Verification is not complete!');
     } else {

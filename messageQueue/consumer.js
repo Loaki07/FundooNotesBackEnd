@@ -5,16 +5,16 @@ const consumeFromQueue = async () => {
   try {
     const connection = await amqp.connect('amqp://localhost:5672');
     const channel = await connection.createChannel();
-    if (!channel) throw new Error();
     const result = await channel.assertQueue('fundooApp');
+    console.log(result);
     channel.consume('fundooApp', (message) => {
-      // sendEmail(message);
-      console.log('From Consumer', JSON.stringify(message));
+      const input = JSON.parse(message.content.toString());
+      sendEmail(input);
+      console.log('Sending Email from queue...');
+      channel.ack(message);
     });
-    channel.ack(message);
-    console.log('Waiting for messages');
   } catch (error) {
-    console.log(error);
+    throw new Error(error.message);
   }
 };
 
