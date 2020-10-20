@@ -7,7 +7,9 @@ import routes from './routes/routes.js';
 import cookieParser from 'cookie-parser';
 import logger from './config/logger.js';
 import RedisCache from './middleware/redisCache.js';
+import RabbitMQ from './msgQueue/rabbitMQ.js';
 
+const { connectToRabbitMQ } = new RabbitMQ();
 const { clearCache } = new RedisCache();
 
 dotenv.config();

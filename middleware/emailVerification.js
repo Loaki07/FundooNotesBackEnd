@@ -1,9 +1,9 @@
 import sendEmail from '../utility/sendEmail.js';
-import sendToQueue from '../messageQueue/publisher.js';
-import consumeFromQueue from '../messageQueue/consumer.js';
+import RabbitMQ from '../msgQueue/rabbitMQ.js';
 import logger from '../config/logger.js';
 import { getSignedEmailVerificationToken } from '../utility/tokens.js';
 import { UserModel } from '../models/user.js';
+const { sendToQueue, consumeFromQueue } = new RabbitMQ();
 const { findOne } = new UserModel();
 
 const verifyEmail = async (req, res, next) => {
@@ -27,8 +27,12 @@ const verifyEmail = async (req, res, next) => {
         subject: 'FundooApp Email Verification',
         message,
       });
-      await consumeFromQueue()
-      // res.redirect('/login');
+      await consumeFromQueue();
+      res.send({
+        success: false,
+        message:
+          'Email is not verified!, \nCheck your inbox to veriy it using the link sent.',
+      });
       logger.error('User Email Verification is not complete!');
     } else {
       next();
