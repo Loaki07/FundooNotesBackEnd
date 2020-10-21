@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
-import connectDB from './config/dbConnection.js';
+// import connectDB from './config/dbConnection.js';
+import './config/dbEvents.js';
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -13,7 +14,7 @@ const { connectToRabbitMQ } = new RabbitMQ();
 const { clearCache } = new RedisCache();
 
 dotenv.config();
-connectDB();
+// connectDB();
 const app = express();
 
 /**

@@ -79,7 +79,7 @@ class NoteController {
     const responseData = {};
     try {
       const result = await updateNoteInDb(req.params.id, req.body);
-      // setDataintoCache(id, result);
+      setDataintoCache(id, result);
       responseData.success = true;
       responseData.message = 'Updated Note';
       responseData.data = result;

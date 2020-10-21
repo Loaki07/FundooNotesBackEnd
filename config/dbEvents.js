@@ -12,10 +12,10 @@ var DEBUG_DISCONNECTION_ERROR =
   'An error has occured while disconnecting from db server%s.';
 
 import mongoose from 'mongoose';
+import blueBird from 'bluebird';
+import dotenv from 'dotenv';
 import debug from 'debug';
-import MongoDBAdapter from './dbConnection.js';
-
-const d = debug(MongoDBAdapter);
+dotenv.config();
 
 const isState = function (state) {
   return mongoose.connection.readyState === mongoose.Connection.STATES[state];
@@ -106,37 +106,18 @@ MongoDBAdapter.prototype.disconnect = function () {
 };
 
 // Export the mongodb connection instance
-module.exports = MongoDBAdapter;
+// export default MongoDBAdapter;
 
-// class MongoDBAdapter {
-//   constructor(uri, options) {
-//     this.uri = uri;
-//     this.options = options;
-//   }
+const d = debug(new MongoDBAdapter());
 
-//   addConnectionListener = (event, cb) => {
-//     const listeners = mongoose.connection._events;
-//     if (!listeners || !listeners[event] || listeners[event].length === 0) {
-//      mongoose.connection.once(event, cb.bind(this));
-//     }
-//   };
+const db = new MongoDBAdapter(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
 
-//   connect = () => {
-//     return new blueBird((resolve, reject) => {
-//      if (isState('connected')) {
-//      d(DEBUG_ALREADY_CONNECTED, this.uri);
-//      return resolve(this.uri);
-//      }
-//     })
-//   }
+db.connect().then(function (uri) {
+  console.log('Connected to ' + uri);
+});
 
-//   addConnectionListener('error', function(err) {
-//   d(DEBUG_CONNECTION_ERROR, this.uri);
-//   return reject(err);
-//   });
-
-//   addConnectionListener('open', function(){
-//   d(DEBUG_CONNECTED, this.uri);
-//   return resolve(this.uri);
-//   });
-// }
+export default db;
