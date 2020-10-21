@@ -3,7 +3,7 @@ import logger from '../config/logger.js';
 import RedisCache from '../middleware/redisCache.js';
 import LabelService from '../services/labelService.js';
 const { setDataintoCache } = new RedisCache();
-const { createNewLabel, deleteLabelFromNote } = new LabelService();
+const { createNewLabel, deleteLabelFromNote, getLabels } = new LabelService();
 
 class LabelController {
   createLabelAndAddToNote = async (req, res) => {
@@ -17,7 +17,7 @@ class LabelController {
       const result = await createNewLabel(labelObject);
       responseData.success = true;
       responseData.data = result;
-      responseData.message = 'Label added to note successfully';
+      responseData.message = 'Showing All Labels from DataBase';
       res.status(200).send(responseData);
     } catch (error) {
       responseData.success = false;
@@ -35,6 +35,22 @@ class LabelController {
         labelName: req.body.labelName,
       };
       const result = await deleteLabelFromNote(labelObject);
+      responseData.success = true;
+      responseData.data = result;
+      responseData.message = 'Deleted Label from note successfully';
+      res.status(200).send(responseData);
+    } catch (error) {
+      responseData.success = false;
+      responseData.message = error.message;
+      logger.error(error.message);
+      res.status(error.statusCode || 500).send(responseData);
+    }
+  };
+
+  getAllLabels = async (req, res) => {
+    const responseData = {};
+    try {
+      const result = await getLabels();
       responseData.success = true;
       responseData.data = result;
       responseData.message = 'Deleted Label from note successfully';

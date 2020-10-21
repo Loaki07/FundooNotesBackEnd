@@ -61,6 +61,10 @@ class LabelService {
     return await findOneAndDelete({ labelName: labelObject.labelName });
   };
 
+  getLabels = async () => {
+    return findLabel();
+  };
+
   #getNote = async (data) => {
     const result = await findOne({
       title: data.title,
