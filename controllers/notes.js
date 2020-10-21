@@ -15,6 +15,12 @@ const {
 } = new NoteService();
 
 class NoteController {
+  /**
+   * @description Validates request body and creates notes
+   * @route POST /users/notes
+   * @param {Object} req
+   * @param {Object} res
+   */
   createNote = async (req, res) => {
     const responseData = {};
     try {
@@ -37,6 +43,12 @@ class NoteController {
     }
   };
 
+  /**
+   * @description Gets all the notes from the db
+   * @route GET /notes
+   * @param {Object} req
+   * @param {Object} res
+   */
   getNotes = async (req, res) => {
     const responseData = {};
     try {
@@ -57,7 +69,13 @@ class NoteController {
     }
   };
 
-  updateSingleNote = async (req, res) => {
+  /**
+   * @description Finds Note in db and updates it
+   * @route PUT /notes/:id
+   * @param {Object} req
+   * @param {Object} res
+   */
+  updateNote = async (req, res) => {
     const responseData = {};
     try {
       const result = await updateNoteInDb(req.params.id, req.body);
@@ -75,7 +93,13 @@ class NoteController {
     }
   };
 
-  getSingleNote = async (req, res) => {
+  /**
+   * @description Finds note sing the note id and user id
+   * @route PUT /notes/:id
+   * @param {*} req
+   * @param {*} res
+   */
+  getNote = async (req, res) => {
     const responseData = {};
     try {
       const result = await findNoteByDb({
@@ -95,7 +119,13 @@ class NoteController {
     }
   };
 
-  deleteSingleNote = async (req, res) => {
+  /**
+   * @description Deletes Notes from db
+   * @route DELETE /notes/:id
+   * @param {Object} req
+   * @param {Object} res
+   */
+  deleteNote = async (req, res) => {
     const responseData = {};
     try {
       const result = await deleteNoteInDb(req.params.id);
@@ -112,6 +142,12 @@ class NoteController {
     }
   };
 
+  /**
+   * @description Get all the notes for the logged in user, implementation of redis cache
+   * @route GET /users/notes
+   * @param {Object} req
+   * @param {Object} res
+   */
   getUserNotes = async (req, res) => {
     const responseData = {};
     try {

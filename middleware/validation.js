@@ -1,6 +1,10 @@
 import Joi from '@hapi/joi';
 
 class Validation {
+  /**
+   * @description Validation using Joi for User schema
+   * @param {Object} user
+   */
   validateUserRegistration = async (user) => {
     const validateObject = Joi.object({
       firstName: Joi.string().min(3).required(),
@@ -12,6 +16,10 @@ class Validation {
     return await validateObject.validateAsync(user);
   };
 
+  /**
+   * @description Validation using Joi for Note schema
+   * @param {Object} note
+   */
   validateNote = async (note) => {
     const validateObject = Joi.object({
       title: Joi.string().min(3).required(),

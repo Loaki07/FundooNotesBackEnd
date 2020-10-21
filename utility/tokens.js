@@ -18,12 +18,20 @@ const getResetPasswordToken = () => {
   return resetToken;
 };
 
+/**
+ * @description To get the token for the email verification
+ * @param {EmailId} payload
+ */
 const getSignedEmailVerificationToken = (payload) => {
   return jwt.sign(payload, process.env.EMAIL_SECRET, {
     expiresIn: process.env.EMAIL_TOKEN_EXPIRY,
   });
 };
 
+/**
+ * @description Verifies the payload in database and the decoded data from the token
+ * @param {Token} requestToken
+ */
 const verifyEmailToken = (requestToken) => {
   return jwt.verify(requestToken, process.env.EMAIL_SECRET);
 };

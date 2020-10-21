@@ -9,9 +9,9 @@ import { verifyEmail } from '../middleware/emailVerification.js';
 const {
   createNote,
   getNotes,
-  updateSingleNote,
-  getSingleNote,
-  deleteSingleNote,
+  updateNote,
+  getNote,
+  deleteNote,
   getUserNotes,
 } = new NoteController();
 const {
@@ -27,7 +27,7 @@ const { createLabelAndAddToNote, deleteLabel, getAllLabels } = new LabelControll
 const { getDataFromCache } = new RedisCache();
 
 /**
- * Auth Routes
+ * Register & Login Routes
  */
 router.route('/register').post(registerUser);
 router.route('/login').post(verifyEmail, logInUser);
@@ -41,18 +41,22 @@ router.route('/fundooapp/resetpassword/:resettoken').put(resetPassword);
 router.route('/notes').get(auth, getNotes);
 router
   .route('/notes/:id')
-  .get(auth, getSingleNote)
-  .delete(auth, deleteSingleNote)
-  .put(auth, updateSingleNote);
+  .get(auth, getNote)
+  .delete(auth, deleteNote)
+  .put(auth, updateNote);
 
 /**
- * User Profile
+ * Users
  */
 router.route('/users/myprofile').get(auth, getCurrentUserProfile);
 router
-  .route('/users/myprofile/notes')
+  .route('/users/notes')
   .get(auth, getDataFromCache, getUserNotes)
   .post(auth, createNote);
+
+/**
+ * Email Verification
+ */
 router.route('/fundooapp/verify-email/:token').get(emailVerification);
 
 /**

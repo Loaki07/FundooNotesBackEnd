@@ -4,6 +4,9 @@ import logger from '../config/logger.js';
 import { ErrorResponse } from '../utility/errorResponse.js';
 
 class RabbitMqMessageQueue {
+  /**
+   * @description Creates the channel for queue
+   */
   connectToRabbitMQ = async () => {
     try {
       const connection = await amqp.connect(process.env.RABBITMQ_PORT);
@@ -19,7 +22,11 @@ class RabbitMqMessageQueue {
     }
   };
 
-  // Publisher
+  /**
+   * @name Publisher
+   * @description Creates the object from the received data and sends it to the queue
+   * @param {Object} options
+   */
   sendToQueue = async (options) => {
     try {
       const message = {
@@ -40,7 +47,11 @@ class RabbitMqMessageQueue {
     }
   };
 
-  // Consumer
+  /**
+   * @name Consumer
+   * @description Comsumes the requests from the queue and sends the mail accordingly using nodemailer
+   * @param {Object} options
+   */
   consumeFromQueue = async () => {
     try {
       const channel = await this.connectToRabbitMQ();

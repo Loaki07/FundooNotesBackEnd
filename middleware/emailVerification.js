@@ -6,6 +6,12 @@ import { UserModel } from '../models/user.js';
 const { sendToQueue, consumeFromQueue } = new RabbitMQ();
 const { findOne } = new UserModel();
 
+/**
+ * @description Middlareware to check if the user's email id is verified or not if not sends verification link
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next 
+ */
 const verifyEmail = async (req, res, next) => {
   const responseData = {};
   try {

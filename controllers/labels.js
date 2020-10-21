@@ -1,4 +1,3 @@
-import { ErrorResponse } from '../utility/errorResponse.js';
 import logger from '../config/logger.js';
 import RedisCache from '../middleware/redisCache.js';
 import LabelService from '../services/labelService.js';
@@ -6,6 +5,13 @@ const { setDataintoCache } = new RedisCache();
 const { createNewLabel, deleteLabelFromNote, getLabels } = new LabelService();
 
 class LabelController {
+
+  /**
+   * @description Creates a label and adds it to the note
+   * @route POST /labels
+   * @param {Object} req 
+   * @param {Object} res 
+   */
   createLabelAndAddToNote = async (req, res) => {
     const responseData = {};
     try {
@@ -27,6 +33,12 @@ class LabelController {
     }
   };
 
+  /**
+   * @description Deletes label in db and note
+   * @route DELETE /labels
+   * @param {Object} req 
+   * @param {Object} res 
+   */
   deleteLabel = async (req, res) => {
     const responseData = {};
     try {
@@ -47,6 +59,12 @@ class LabelController {
     }
   };
 
+  /**
+   * @description Gets all the labels from db
+   * @route GET /labels
+   * @param {Object} req 
+   * @param {Object} res 
+   */
   getAllLabels = async (req, res) => {
     const responseData = {};
     try {

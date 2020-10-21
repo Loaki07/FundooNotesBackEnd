@@ -13,6 +13,10 @@ const {
 } = new LabelModel();
 
 class LabelService {
+  /**
+   * @description Finds the note id from the title and adds it to the label object, then a new label is created in db and added to note
+   * @param {Object} data
+   */
   createNewLabel = async (data) => {
     const findNote = await this.#getNote(data);
 
@@ -31,6 +35,10 @@ class LabelService {
     return await this.addLabelToNote(label);
   };
 
+  /**
+   * @description Adds the label to the node
+   * @param {Object} labelObject
+   */
   addLabelToNote = async (labelObject) => {
     const updatedToNote = await updateNoteWithExistingData(
       { _id: labelObject.noteId },
@@ -44,6 +52,10 @@ class LabelService {
     return updatedToNote;
   };
 
+  /**
+   * @description Deletes label in db and from note
+   * @param {Object} labelObject
+   */
   deleteLabelFromNote = async (labelObject) => {
     const findNote = await this.#getNote(labelObject);
 
@@ -57,14 +69,25 @@ class LabelService {
     return true;
   };
 
+  /**
+   * @description Function to delete the label fron db
+   * @param {Object} labelObject
+   */
   deleteLabelInDb = async (labelObject) => {
     return await findOneAndDelete({ labelName: labelObject.labelName });
   };
 
+  /**
+   * Gets all the labels from the db
+   */
   getLabels = async () => {
     return findLabel();
   };
 
+  /**
+   * @description Function to get note with the title
+   * @param {Object} data
+   */
   #getNote = async (data) => {
     const result = await findOne({
       title: data.title,
@@ -76,6 +99,11 @@ class LabelService {
     return result;
   };
 
+  /**
+   * @description Function to update the labels onto the note
+   * @param {ObjectID} id
+   * @param {Object} data
+   */
   #updateNote = async (id, data) => {
     const result = await updateNote(
       { _id: id },

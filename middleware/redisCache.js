@@ -8,6 +8,12 @@ const REDIS_PORT = 6379;
 const client = redis.createClient(REDIS_PORT);
 
 class RedisCache {
+  /**
+   * @description Middleware function to get data stored from cache
+   * @param {Object} req 
+   * @param {Object} res 
+   * @param {Function} next 
+   */
   getDataFromCache = (req, res, next) => {
     const responseData = {};
     client.get(`User:${req.user._id}`, (err, data) => {
@@ -30,10 +36,18 @@ class RedisCache {
     });
   };
 
+  /**
+   * @description Set key: value, data into redis cache
+   * @param {ObjectId} userId 
+   * @param {Object} data 
+   */
   setDataintoCache = (userId, data) => {
     client.set(`User:${userId}`, JSON.stringify(data));
   };
 
+  /**
+   * @description Function to clear the redis cache
+   */
   clearCache = () => {
     console.log(`Redis Cache cleared and is ready for use...`);
     logger.info(`Redis Cache cleared and is ready for use...`);

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
+// Note Schema
 const noteSchema = new mongoose.Schema(
   {
     title: {
@@ -65,6 +66,7 @@ const noteSchema = new mongoose.Schema(
 const Note = mongoose.model('Note', noteSchema);
 
 class NoteModel {
+  // Creates a note and saves it in db
   createNote = async (data) => {
     const {
       title,
@@ -92,14 +94,17 @@ class NoteModel {
     });
   };
 
+  // Mongoose Method to find all notes
   getAllNotes = async () => {
     return Note.find();
   };
 
+  // Mongoose Method to save note
   saveNote = async (note) => {
     return note.save;
   };
 
+  // Updates the note by replacing the old data with the new data
   updateNote = async (id, updatedNoteObject) => {
     return Note.findOneAndUpdate(
       id,
@@ -113,6 +118,7 @@ class NoteModel {
     );
   };
 
+  // Updates not by adding on to the existing data
   updateNoteWithExistingData = async (id, updatedNoteObject) => {
     return Note.findOneAndUpdate(
       id,
@@ -126,14 +132,17 @@ class NoteModel {
     );
   };
 
+  // Mongoose method to find note by id and delete
   deleteNote = async (id) => {
     return Note.findByIdAndDelete(id);
   };
 
+  // Mongoose method to find one note using schema fields
   findOne = async (fields) => {
     return Note.findOne(fields);
   };
 
+  // Mongoose method to find notes using schema fields
   find = async (fields) => {
     return Note.find(fields);
   };

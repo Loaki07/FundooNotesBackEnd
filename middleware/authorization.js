@@ -2,6 +2,12 @@ import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.js';
 const { getProtectedUser } = new UserModel();
 
+/**
+ * @description Middleware funnction to check and verify the token in the authorization headers
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 const auth = async (req, res, next) => {
   try {
     let token;

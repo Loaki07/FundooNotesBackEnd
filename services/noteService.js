@@ -11,6 +11,10 @@ const {
 } = new NoteModel();
 
 class NoteService {
+  /**
+   * @description Create Notes
+   * @param {Object} data 
+   */
   createNewNote = async (data) => {
     try {
       const isNotePresent = await findOne({
@@ -25,6 +29,11 @@ class NoteService {
     }
   };
 
+  /**
+   * @description Gets all the notes from db 
+   * @param {Object} req 
+   * @param {Object} res 
+   */
   findAllNotes = async (req, res) => {
     try {
       return await getAllNotes();
@@ -33,6 +42,11 @@ class NoteService {
     }
   };
 
+  /**
+   * @description Updtes Notes
+   * @param {Object} id 
+   * @param {Object} data 
+   */
   updateNoteInDb = async (id, data) => {
     try {
       const result = await updateNote(id, data);
@@ -45,6 +59,10 @@ class NoteService {
     }
   };
 
+  /**
+   * @description Finds notes by the schema fields
+   * @param {Object} fields 
+   */
   findNoteByDb = async (fields) => {
     try {
       const result = await findOne(fields);
@@ -57,6 +75,10 @@ class NoteService {
     }
   };
 
+  /**
+   * @description Delete Note by object id
+   * @param {ObjectID} id 
+   */
   deleteNoteInDb = async (id) => {
     try {
       const result = await deleteNote({ _id: id });
@@ -69,6 +91,10 @@ class NoteService {
     }
   };
 
+/**
+ * @description Gets all notes for a unique user
+ * @param {Object} fields 
+ */
   getNotesByUserId = async (fields) => {
     try {
       const result = await find(fields);
