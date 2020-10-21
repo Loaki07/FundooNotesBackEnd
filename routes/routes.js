@@ -23,7 +23,7 @@ const {
   resetPassword,
   emailVerification,
 } = new UserController();
-const {createLabelAndAddToNote} = new LabelController();
+const { createLabelAndAddToNote, deleteLabel } = new LabelController();
 const { getDataFromCache } = new RedisCache();
 
 /**
@@ -58,7 +58,6 @@ router.route('/fundooapp/verify-email/:token').get(emailVerification);
 /**
  * Labels
  */
-router.route('/labels').post(auth, createLabelAndAddToNote);
-
+router.route('/labels').post(auth, createLabelAndAddToNote).delete(auth, deleteLabel);
 
 export default router;

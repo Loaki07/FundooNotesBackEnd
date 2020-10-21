@@ -5,6 +5,7 @@ const labelSchema = new mongoose.Schema(
   {
     labelName: {
       type: String,
+      unique: true,
     },
     noteId: {
       type: Schema.Types.ObjectId,
@@ -60,6 +61,10 @@ class LabelModel {
 
   deleteLabel = async (id) => {
     return Label.findByIdAndDelete(id);
+  };
+
+  findOneAndDelete = async (fields) => {
+    return Label.findOneAndDelete(fields);
   };
 }
 
