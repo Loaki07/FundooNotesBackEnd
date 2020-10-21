@@ -15,9 +15,11 @@
     "@hapi/joi": "^17.1.1",
     "amqplib": "^0.6.0",
     "bcrypt": "^5.0.0",
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "debug": "^4.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
@@ -26,5 +28,11 @@
     "redis": "^3.0.2",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "engines": {
+    "node": "^14"
   }
 }

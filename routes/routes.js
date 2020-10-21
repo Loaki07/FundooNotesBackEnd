@@ -2,6 +2,7 @@ import express from 'express';
 const router = express.Router();
 import UserController from '../controllers/users.js';
 import NoteController from '../controllers/notes.js';
+import LabelController from '../controllers/labels.js';
 import RedisCache from '../middleware/redisCache.js';
 import { auth } from '../middleware/authorization.js';
 import { verifyEmail } from '../middleware/emailVerification.js';
@@ -22,6 +23,7 @@ const {
   resetPassword,
   emailVerification,
 } = new UserController();
+const {createLabelAndAddToNote} = new LabelController();
 const { getDataFromCache } = new RedisCache();
 
 /**
@@ -52,5 +54,11 @@ router
   .get(auth, getDataFromCache, getUserNotes)
   .post(auth, createNote);
 router.route('/fundooapp/verify-email/:token').get(emailVerification);
+
+/**
+ * Labels
+ */
+router.route('/labels').post(auth, createLabelAndAddToNote);
+
 
 export default router;

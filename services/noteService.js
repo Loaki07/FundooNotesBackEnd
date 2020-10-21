@@ -11,7 +11,7 @@ const {
 } = new NoteModel();
 
 class NoteService {
-  createNewNote = async (data, next) => {
+  createNewNote = async (data) => {
     try {
       const isNotePresent = await findOne({
         title: data.title,

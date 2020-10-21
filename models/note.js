@@ -53,7 +53,7 @@ const noteSchema = new mongoose.Schema(
       ref: 'User',
     },
     labels: {
-      type: [String],
+      type: [Object],   
     },
   },
   {
@@ -76,7 +76,7 @@ class NoteModel {
       remaindMe,
       isArchived,
       userId,
-      labels
+      labels,
     } = data;
     return await Note.create({
       title,
@@ -88,7 +88,7 @@ class NoteModel {
       remaindMe,
       isArchived,
       userId,
-      labels
+      labels,
     });
   };
 
@@ -105,6 +105,19 @@ class NoteModel {
       id,
       {
         $set: updatedNoteObject,
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+  };
+
+  updateNoteWithExistingData = async (id, updatedNoteObject) => {
+    return Note.findOneAndUpdate(
+      id,
+      {
+        $push: updatedNoteObject,
       },
       {
         new: true,

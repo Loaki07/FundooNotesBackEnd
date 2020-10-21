@@ -10,6 +10,10 @@ const labelSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'Note',
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
@@ -21,10 +25,11 @@ const Label = mongoose.model('Label', labelSchema);
 
 class LabelModel {
   createLabel = async (data) => {
-    const { labelName, noteId } = data;
+    const { labelName, noteId, userId } = data;
     return Label.create({
       labelName,
       noteId,
+      userId,
     });
   };
 
