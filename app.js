@@ -39,17 +39,28 @@ app.get('/', (req, res) => {
   });
 });
 
-/**
- * Server
- */
+// Handler for Global Errors
+app.use((err, req, res, next) => {
+  if (!err) {
+    return next();
+  }
+  res.status(500).send({
+    success: false,
+    message: '500, Internal Server Error',
+  });
+});
 
- 
+// Handler for non-existence routes
 app.use('*', (req, res) => {
   res.status(404).send({
     success: false,
     message: 'Page Does not exist',
   });
 });
+
+/**
+ * Server
+ */
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}...`);
