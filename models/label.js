@@ -7,6 +7,7 @@ const labelSchema = new mongoose.Schema(
     labelName: {
       type: String,
       unique: true,
+      required: true,
     },
     noteId: {
       type: Schema.Types.ObjectId,
@@ -15,6 +16,10 @@ const labelSchema = new mongoose.Schema(
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+    },
+    isDelete: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -28,11 +33,12 @@ const Label = mongoose.model('Label', labelSchema);
 class LabelModel {
   // Creating a label
   createLabel = async (data) => {
-    const { labelName, noteId, userId } = data;
+    const { labelName, noteId, userId, isDelete } = data;
     return Label.create({
       labelName,
       noteId,
       userId,
+      isDelete,
     });
   };
 

@@ -5,20 +5,20 @@ const { setDataintoCache } = new RedisCache();
 const { createNewLabel, deleteLabelFromNote, getLabels } = new LabelService();
 
 class LabelController {
-
   /**
    * @description Creates a label and adds it to the note
    * @route POST /labels
-   * @param {Object} req 
-   * @param {Object} res 
+   * @param {Object} req
+   * @param {Object} res
    */
   createLabelAndAddToNote = async (req, res) => {
     const responseData = {};
     try {
       const labelObject = {
-        title: req.body.title,
+        noteId: req.body.noteId,
         labelName: req.body.labelName,
         userId: req.user._id,
+        isDelete: req.body.delete,
       };
       const result = await createNewLabel(labelObject);
       responseData.success = true;
@@ -36,14 +36,14 @@ class LabelController {
   /**
    * @description Deletes label in db and note
    * @route DELETE /labels
-   * @param {Object} req 
-   * @param {Object} res 
+   * @param {Object} req
+   * @param {Object} res
    */
   deleteLabel = async (req, res) => {
     const responseData = {};
     try {
       const labelObject = {
-        title: req.body.title,
+        noteId: req.body.noteId,
         labelName: req.body.labelName,
       };
       const result = await deleteLabelFromNote(labelObject);
@@ -62,8 +62,8 @@ class LabelController {
   /**
    * @description Gets all the labels from db
    * @route GET /labels
-   * @param {Object} req 
-   * @param {Object} res 
+   * @param {Object} req
+   * @param {Object} res
    */
   getAllLabels = async (req, res) => {
     const responseData = {};

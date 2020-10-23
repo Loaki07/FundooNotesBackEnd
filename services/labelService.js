@@ -18,20 +18,22 @@ class LabelService {
    * @param {Object} data
    */
   createNewLabel = async (data) => {
-    const findNote = await this.#getNote(data);
-
+    const findNote = await this.#getNote({
+      _id: data.noteId,
+    });
+    
     const labelObject = {
       labelName: data.labelName,
-      noteId: findNote._id,
+      noteId: data.noteId,
       userId: data.userId,
     };
 
-    const isLabelPresent = await findOneLabel(labelObject);
+    const isLabelPresent = await findOneLabel({labelObject});
 
-    if (isLabelPresent) {
+    if (isLabelPresent instanceof Error) {
       throw new ErrorResponse('Already Exists', 400);
     }
-    const label = await createLabel(labelObject);
+    const label = await createLabel(data);
     return await this.addLabelToNote(label);
   };
 
@@ -57,7 +59,9 @@ class LabelService {
    * @param {Object} labelObject
    */
   deleteLabelFromNote = async (labelObject) => {
-    const findNote = await this.#getNote(labelObject);
+    const findNote = await this.#getNote({
+      _id: labelObject.noteId,
+    });
 
     findNote.labels.forEach((label, index, object) => {
       if (label.labelName === labelObject.labelName) {
@@ -89,9 +93,7 @@ class LabelService {
    * @param {Object} data
    */
   #getNote = async (data) => {
-    const result = await findOne({
-      title: data.title,
-    });
+    const result = await findOne(data);
 
     if (!result) {
       throw new ErrorResponse('Could not be Found', 404);

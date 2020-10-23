@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-// import connectDB from './config/dbConnection.js';
 import './config/dbEvents.js';
 import cors from 'cors';
 import express from 'express';
@@ -14,7 +13,6 @@ const { connectToRabbitMQ } = new RabbitMQ();
 const { clearCache } = new RedisCache();
 
 dotenv.config();
-// connectDB();
 const app = express();
 
 /**
@@ -45,6 +43,7 @@ app.get('/', (req, res) => {
  * Server
  */
 
+ 
 app.use('*', (req, res) => {
   res.status(404).send({
     success: false,
