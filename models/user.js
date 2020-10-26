@@ -104,6 +104,10 @@ class UserModel {
   clearResetFields = (user) => {
     (user.resetPasswordToken = undefined), (user.resetPasswordExpire = undefined);
   };
+
+  findMultipleUsers = (fields) => {
+    return User.find(fields);
+  };
 }
 
 export { UserModel, User };

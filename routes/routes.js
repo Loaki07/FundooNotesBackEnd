@@ -3,6 +3,7 @@ const router = express.Router();
 import UserController from '../controllers/users.js';
 import NoteController from '../controllers/notes.js';
 import LabelController from '../controllers/labels.js';
+import CollaboratorController from '../controllers/collaborators.js';
 import RedisCache from '../middleware/redisCache.js';
 import { auth } from '../middleware/authorization.js';
 import { verifyEmail } from '../middleware/emailVerification.js';
@@ -24,6 +25,12 @@ const {
   emailVerification,
 } = new UserController();
 const { createLabelAndAddToNote, deleteLabel, getAllLabels } = new LabelController();
+const {
+  getAllRegisteredEmailIds,
+  createCollaborator,
+  deleteCollaborator,
+  getCollaborators,
+} = new CollaboratorController();
 const { getDataFromCache } = new RedisCache();
 
 /**
@@ -38,7 +45,6 @@ router.route('/fundooapp/resetpassword/:resettoken').put(resetPassword);
 /**
  * Note Routes
  */
-router.route('/notes').get(auth, getNotes);
 router
   .route('/notes/:id')
   .get(auth, getNote)
@@ -67,5 +73,15 @@ router
   .get(auth, getAllLabels)
   .post(auth, createLabelAndAddToNote)
   .delete(auth, deleteLabel);
+
+/**
+ * Collaborators
+ */
+router.route('/get-all-registered-emails').get(auth, getAllRegisteredEmailIds);
+router
+  .route('/collaborators')
+  .get(auth, getCollaborators)
+  .post(auth, createCollaborator)
+  .delete(auth, deleteCollaborator);
 
 export default router;

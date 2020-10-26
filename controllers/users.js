@@ -38,6 +38,7 @@ class UserController {
       responseData.success = false;
       responseData.message = error.message;
       logger.error(error.message);
+      console.log(error.stack);
       res.status(500).send(responseData);
     }
   };

@@ -28,7 +28,7 @@ class LabelService {
       userId: data.userId,
     };
 
-    const isLabelPresent = await findOneLabel({labelObject});
+    const isLabelPresent = findOneLabel
 
     if (isLabelPresent instanceof Error) {
       throw new ErrorResponse('Already Exists', 400);
@@ -89,7 +89,7 @@ class LabelService {
   };
 
   /**
-   * @description Function to get note with the title
+   * @description Function to get note
    * @param {Object} data
    */
   #getNote = async (data) => {
