@@ -42,6 +42,7 @@ class CollaboratorController {
       const collaboratorObject = {
         collaboratorEmail: req.body.collaboratorEmail,
         noteId: req.body.noteId,
+        userId: req.user._id,
       };
       const result = await createNewCollaborator(collaboratorObject);
       responseData.success = true;
@@ -70,7 +71,6 @@ class CollaboratorController {
         noteId: req.body.noteId,
       };
       const result = await deleteCollaboratorFromNote(collabratorObject);
-      console.log('from controller', result);
       responseData.success = true;
       responseData.message = 'Successfully deleted collabrator!';
       responseData.data = result;

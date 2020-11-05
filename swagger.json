@@ -1,0 +1,53 @@
+{
+  "info": {
+    "title": "Fundoo Application Api",
+    "version": "1.0.0",
+    "description": "To-do list note taking app"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "swagger": "2.0",
+  "paths": {
+    "/get-all-user-emails": {
+      "get": {
+        "description": "Gets all the email-ids of the registered users",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer {jwt token}",
+            "required": "true",
+            "type": "string"
+          }
+        ],
+        "security": {
+          "bearerAuth": "[]"  
+        },
+        "responses":{
+          "200": {
+            "description": "Displaying all the registered email ids"
+          }
+        }
+      }
+    }
+   },
+  "schemes": [ "http", "https" ],
+  "definitions": { },
+  "responses": { },
+  "parameters": { },
+  "securityDefinitions": [
+    {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      } 
+    },
+    {
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      }
+    }
+  ]
+}

@@ -71,7 +71,7 @@ class LabelController {
       const result = await getLabels();
       responseData.success = true;
       responseData.data = result;
-      responseData.message = 'Deleted Label from note successfully';
+      responseData.message = 'Showing all labels from Db';
       res.status(200).send(responseData);
     } catch (error) {
       responseData.success = false;

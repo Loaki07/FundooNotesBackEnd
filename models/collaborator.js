@@ -16,6 +16,10 @@ const collaboratorSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'Note',
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 const Collaborator = mongoose.model('Collaborator', collaboratorSchema);
@@ -23,10 +27,11 @@ const Collaborator = mongoose.model('Collaborator', collaboratorSchema);
 class CollaboratorModel {
   // Creating a Collabrator
   createCollabrator = async (data) => {
-    const { collaboratorEmail, noteId } = data;
+    const { collaboratorEmail, noteId, userId } = data;
     return Collaborator.create({
       collaboratorEmail,
       noteId,
+      userId,
     });
   };
 

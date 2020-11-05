@@ -2,7 +2,7 @@ import { CollaboratorModel } from '../models/collaborator.js';
 import { NoteModel } from '../models/note.js';
 import { UserModel } from '../models/user.js';
 import { ErrorResponse } from '../utility/errorResponse.js';
-const { createCollabrator, findCollabrator, findOneAndDelete,  } = new CollaboratorModel();
+const { createCollabrator, findCollabrator, findOneAndDelete } = new CollaboratorModel();
 const { getAllUsers } = new UserModel();
 const { updateNoteWithExistingData, updateNote, findOne } = new NoteModel();
 
@@ -37,7 +37,7 @@ class CollaboratorService {
     };
 
     findNote.collaborators.forEach((collaborator) => {
-      if (collaborator.collabratorEmail === data.collabratorEmail) {
+      if (collaborator.collaboratorEmail === data.collabratorEmail) {
         throw new ErrorResponse('Collaborator already present', 400);
       }
     });

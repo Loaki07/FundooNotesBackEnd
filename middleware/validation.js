@@ -6,7 +6,7 @@ class Validation {
    * @param {Object} user
    */
   validateUserRegistration = async (user) => {
-    const validateObject = Joi.object({
+    const validateObject = Joi.object({ 
       firstName: Joi.string().min(3).required(),
       lastName: Joi.string().min(3).required(),
       emailId: Joi.string().email().lowercase().required(),

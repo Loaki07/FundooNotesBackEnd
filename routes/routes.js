@@ -77,7 +77,7 @@ router
 /**
  * Collaborators
  */
-router.route('/get-all-registered-emails').get(auth, getAllRegisteredEmailIds);
+router.route('/get-all-user-emails').get(auth, getAllRegisteredEmailIds);
 router
   .route('/collaborators')
   .get(auth, getCollaborators)
