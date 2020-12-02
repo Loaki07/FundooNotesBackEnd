@@ -79,7 +79,7 @@ class NoteController {
     const responseData = {};
     try {
       const result = await updateNoteInDb(req.params.id, req.body);
-      setDataintoCache(id, result);
+      setDataintoCache(req.params.id, result);
       responseData.success = true;
       responseData.message = 'Updated Note';
       responseData.data = result;
@@ -89,6 +89,7 @@ class NoteController {
       responseData.success = false;
       responseData.message = error.message;
       logger.error(error.message);
+      // console.log(error.stack);
       res.status(error.statusCode || 500).send(responseData);
     }
   };

@@ -170,7 +170,10 @@ class UserController {
         isEmailVerified: true,
       });
       logger.info('User EmailId is Verified');
-      res.redirect('/login');
+      responseData.success = true;
+      responseData.message = 'Successfully Verified Email!';
+      logger.info(responseData.message);
+      res.status(200).send(responseData);
     } catch (error) {
       responseData.success = false;
       responseData.message = error.message;

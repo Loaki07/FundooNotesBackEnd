@@ -9,7 +9,7 @@ const {
   findOne,
   saveUser,
   clearResetFields,
-  saveUserWithoutValidation,
+  saveUserWithoutValidation, 
   updateUser,
 } = new UserModel();
 
